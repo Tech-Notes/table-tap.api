@@ -1,0 +1,5 @@
+# env
+.env
+
+#debug
+__debug_bin*
