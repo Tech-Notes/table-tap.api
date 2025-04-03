@@ -23,7 +23,7 @@
  
      migrate -path ./migrations/ -database "postgresql://username:password@localhost:5432/database_name?sslmode=disable" -verbose up
 
- **migration down:
+ **migration down:**
  
      migrate -path ./migrations/ -database "postgresql://username:password@localhost:5432/database_name?sslmode=disable" -verbose down
  
