@@ -2,10 +2,10 @@
 .PHONY: migration_up migration_down
 
 migration_up:
-	migrate -path ./migrations/ -database $(TABLE_TAP_DB) -verbose up
+	@migrate -path ./migrations/ -database $(TABLE_TAP_DB) -verbose up
 
 migration_down:
-	migrate -path ./migrations/ -database $(TABLE_TAP_DB) -verbose down
+	@migrate -path ./migrations/ -database $(TABLE_TAP_DB) -verbose down
 
 migration_fix:
 	migrate -path ./migrations/ -database $(TABLE_TAP_DB) force $(VERSION)
