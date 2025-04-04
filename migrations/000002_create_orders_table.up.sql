@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS orders (
+    id SERIAL PRIMARY KEY,
+    business_id INT NOT NULL,
+    table_id INT NOT NULL,
+    status VARCHAR(25) DEFAULT 'pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS permissions (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    role_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (role_id) REFERENCES businesses_roles(id)
+    ON DELETE CASCADE
+);

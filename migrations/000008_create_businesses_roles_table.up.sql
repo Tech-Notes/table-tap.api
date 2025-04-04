@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS businesses_roles (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    business_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (business_id) REFERENCES businesses(id)
+    ON DELETE CASCADE
+);
