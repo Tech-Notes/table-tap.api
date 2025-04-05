@@ -1,11 +1,12 @@
 package internal
 
 type BusinessUser struct {
-	ID         int    `json:"id" db:"id"`
+	ID         int64  `json:"id" db:"id"`
 	Email      string `json:"email" db:"email"`
-	BusinessID int    `json:"business_id" db:"business_id"`
+	Password   string `json:"password" db:"password"`
+	BusinessID int64  `json:"business_id" db:"business_id"`
 	Role       string `json:"role" db:"role"`
-	RoleID     int    `json:"role_id" db:"role_id"`
+	RoleID     int64  `json:"role_id" db:"role_id"`
 	CreatedAt  string `json:"created_at" db:"created_at"`
 	UpdatedAt  string `json:"updated_at" db:"updated_at"`
 }

@@ -11,6 +11,7 @@ func (db *DB) GetLastActiveBusinessUserByEmail(ctx context.Context, email string
 	query := `
 	SELECT bu.id,
 	u.email,
+	u.password,
 	bu.business_id,
 	bu.role,
 	bu.role_id,

@@ -13,6 +13,8 @@ func GetRootRouter() *chi.Mux {
 func getApiRouter() *chi.Mux {
 	api := chi.NewRouter()
 
+	api.Post("/v1/signin", SignInHandler)
+
 	v1 := chi.NewRouter()
 
 	v1.Use(verify)
