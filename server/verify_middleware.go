@@ -1,12 +1,16 @@
 package main
 
 import (
+	"context"
 	"crypto/hmac"
 	"crypto/sha256"
+	"database/sql"
 	"encoding/hex"
 	"errors"
 	"net/http"
 	"os"
+
+	internal "github.com/table-tap/api/internal/types"
 )
 
 func verify(h http.Handler) http.Handler {
@@ -16,7 +20,7 @@ func verify(h http.Handler) http.Handler {
 			verifyWithAdminSecret(h).ServeHTTP(w, r)
 			return
 		}
-		
+
 		hmacSignature := r.Header.Get("X-HMAC-SIGNATURE")
 		if hmacSignature == "" {
 			writeError(w, http.StatusUnauthorized, errors.New("missing HMAC signature"))
@@ -26,6 +30,13 @@ func verify(h http.Handler) http.Handler {
 		verifyWithHMACSignature(h).ServeHTTP(w, r)
 		return
 	})
+}
+
+func generateHMACSignature(data, secret string) string {
+	h := hmac.New(sha256.New, []byte(secret))
+	h.Write([]byte(data))
+	signature := hex.EncodeToString(h.Sum(nil))
+	return signature
 }
 
 func verifyWithHMACSignature(h http.Handler) http.Handler {
@@ -38,15 +49,16 @@ func verifyWithHMACSignature(h http.Handler) http.Handler {
 			return
 		}
 
-		h.ServeHTTP(w, r)
-	})
-}
+		userEmail := r.Header.Get("X-USER-EMAIL")
 
-func generateHMACSignature(data, secret string) string {
-	h := hmac.New(sha256.New, []byte(secret))
-	h.Write([]byte(data))
-	signature := hex.EncodeToString(h.Sum(nil))
-	return signature
+		ctx, err := getContext(r.Context(), userEmail)
+		if err != nil {
+			writeError(w, http.StatusUnauthorized, err)
+			return
+		}
+
+		h.ServeHTTP(w, r.WithContext(ctx))
+	})
 }
 
 func verifyWithAdminSecret(h http.Handler) http.Handler {
@@ -57,6 +69,35 @@ func verifyWithAdminSecret(h http.Handler) http.Handler {
 			return
 		}
 
-		h.ServeHTTP(w, r)
+		userEmail := r.Header.Get("X-USER-EMAIL")
+
+		ctx, err := getContext(r.Context(), userEmail)
+		if err != nil {
+			writeError(w, http.StatusUnauthorized, err)
+			return
+		}
+
+		h.ServeHTTP(w, r.WithContext(ctx))
 	})
+}
+
+func getContext(ctx context.Context, userEmail string) (context.Context, error) {
+	if userEmail == "" {
+		return nil, errors.New("missing user email")
+	}
+
+	businessUser, err := DBConn.GetLastActiveBusinessUserByEmail(ctx, userEmail)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, errors.New("user not found")
+		}
+		return nil, err
+	}
+
+	ctx = context.WithValue(ctx, internal.ContextkeyUserEmail, userEmail)
+	ctx = context.WithValue(ctx, internal.ContextKeyUserID, businessUser.ID)
+	ctx = context.WithValue(ctx, internal.ContextKeyBusinessID, businessUser.BusinessID)
+
+	return ctx, nil
 }
