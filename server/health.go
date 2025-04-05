@@ -1,8 +1,11 @@
 package main
 
-import "net/http"
+import (
+	"net/http"
+
+	internal "github.com/table-tap/api/internal/types"
+)
 
 func HealthCheckHandler(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("OK"))
+	writeJSON(w, http.StatusOK, internal.SuccessResponse)
 }
