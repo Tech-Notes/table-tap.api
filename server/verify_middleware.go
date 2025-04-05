@@ -11,6 +11,11 @@ import (
 
 func verify(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		adminSecret := r.Header.Get("X-ADMIN-SECRET")
+		if adminSecret != "" {
+			verifyWithAdminSecret(h).ServeHTTP(w, r)
+			return
+		}
 		
 		hmacSignature := r.Header.Get("X-HMAC-SIGNATURE")
 		if hmacSignature == "" {
@@ -42,4 +47,16 @@ func generateHMACSignature(data, secret string) string {
 	h.Write([]byte(data))
 	signature := hex.EncodeToString(h.Sum(nil))
 	return signature
+}
+
+func verifyWithAdminSecret(h http.Handler) http.Handler {
+	adminSecret := os.Getenv("X_ADMIN_SECRET")
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Header.Get("X-ADMIN-SECRET") != adminSecret {
+			writeError(w, http.StatusUnauthorized, errors.New("invalid admin secret"))
+			return
+		}
+
+		h.ServeHTTP(w, r)
+	})
 }
