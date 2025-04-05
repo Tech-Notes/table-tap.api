@@ -15,6 +15,8 @@ func getApiRouter() *chi.Mux {
 
 	v1 := chi.NewRouter()
 
+	v1.Use(verify)
+
 	v1.Route("/healthCheck", func(r chi.Router) {
 		r.Get("/", HealthCheckHandler)
 	})
