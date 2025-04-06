@@ -98,6 +98,7 @@ func getContext(ctx context.Context, userEmail string) (context.Context, error) 
 	ctx = context.WithValue(ctx, internal.ContextkeyUserEmail, userEmail)
 	ctx = context.WithValue(ctx, internal.ContextKeyUserID, businessUser.ID)
 	ctx = context.WithValue(ctx, internal.ContextKeyBusinessID, businessUser.BusinessID)
+	ctx = context.WithValue(ctx, internal.ContextKeyPermissions, businessUser.Permissions)
 
 	return ctx, nil
 }
