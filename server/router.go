@@ -20,7 +20,7 @@ func getApiRouter() *chi.Mux {
 	v1.Use(verify)
 
 	v1.Route("/healthCheck", func(r chi.Router) {
-		r.Get("/", HealthCheckHandler)
+		r.Get("/", authorizeHandler(AdminRead, HealthCheckHandler))
 	})
 
 	api.Mount("/v1", v1)

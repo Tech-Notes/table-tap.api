@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/lib/pq"
 	internal "github.com/table-tap/api/internal/types"
 )
 
@@ -101,4 +102,12 @@ func getContext(ctx context.Context, userEmail string) (context.Context, error) 
 	ctx = context.WithValue(ctx, internal.ContextKeyPermissions, businessUser.Permissions)
 
 	return ctx, nil
+}
+
+func BusinessUserPermissionsFromContext(ctx context.Context) []string {
+	permissions := ctx.Value(internal.ContextKeyPermissions)
+	if permissions, ok := permissions.(pq.StringArray); ok {
+		return permissions
+	}
+	return nil
 }
