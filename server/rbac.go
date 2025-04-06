@@ -10,16 +10,7 @@ import (
 type PermissionName string
 
 const (
-	AdminRead   PermissionName = "admin:read"
-	AdminWrite  PermissionName = "admin:write"
-	AdminDelete PermissionName = "admin:delete"
-	AdminUpdate PermissionName = "admin:update"
-	AdminCreate PermissionName = "admin:create"
-	ChefRead    PermissionName = "chef:read"
-	ChefWrite   PermissionName = "chef:write"
-	ChefDelete  PermissionName = "chef:delete"
-	ChefUpdate  PermissionName = "chef:update"
-	ChefCreate  PermissionName = "chef:create"
+	DashboardView PermissionName = "dashboard_view"
 )
 
 func checkPermissionAccess(ctx context.Context, permission PermissionName) bool {
