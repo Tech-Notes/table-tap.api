@@ -17,11 +17,10 @@ func CreateTableHandler(w http.ResponseWriter, r *http.Request) {
 	businessID := BusinessIDFromContext(ctx)
 	secureToken := uuid.New().String()
 
-	// Create order URL for QR
-	orderURL := "https://ordertap.com/order/" + secureToken
+	qrURL := "https://ordertap.com/order/" + secureToken
 
 	// Generate QR code image
-	qrPNG, err := qrcode.Encode(orderURL, qrcode.Medium, 256)
+	qrPNG, err := qrcode.Encode(qrURL, qrcode.Medium, 256)
 	if err != nil {
 		http.Error(w, "Failed to generate QR", http.StatusInternalServerError)
 		return
@@ -29,7 +28,7 @@ func CreateTableHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Upload QR image to S3
 	fileName := secureToken + ".png"
-	imageURL, err := utils.UploadToS3(r.Context(), businessID, qrPNG, fileName, "table_qr")
+	imageURL, err := utils.UploadToS3(ctx, businessID, qrPNG, fileName, "table_qrs")
 	if err != nil {
 		http.Error(w, "Failed to upload QR to S3", http.StatusInternalServerError)
 		return
@@ -40,6 +39,7 @@ func CreateTableHandler(w http.ResponseWriter, r *http.Request) {
 		BusinessID: businessID,
 		QrCodeURL:  imageURL,
 		Status:     "active",
+		Token:      secureToken,
 	}
 
 	_, err = DBConn.CreateTable(ctx, table)

@@ -23,6 +23,10 @@ func getApiRouter() *chi.Mux {
 		r.Get("/", authorizeHandler(DashboardView, HealthCheckHandler))
 	})
 
+	v1.Route("/tables", func(tables chi.Router) {
+		tables.Post("/", CreateTableHandler)
+	})
+
 	api.Mount("/v1", v1)
 
 	return api
