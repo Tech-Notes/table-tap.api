@@ -11,6 +11,7 @@ type PermissionName string
 
 const (
 	DashboardView PermissionName = "dashboard_view"
+	CreateTable   PermissionName = "create_table"
 )
 
 func checkPermissionAccess(ctx context.Context, permission PermissionName) bool {

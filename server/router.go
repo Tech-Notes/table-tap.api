@@ -24,7 +24,7 @@ func getApiRouter() *chi.Mux {
 	})
 
 	v1.Route("/tables", func(tables chi.Router) {
-		tables.Post("/", CreateTableHandler)
+		tables.Post("/", authorizeHandler(CreateTable, CreateTableHandler))
 	})
 
 	api.Mount("/v1", v1)
