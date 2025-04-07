@@ -28,6 +28,7 @@ require (
 
 require (
 	github.com/aws/aws-sdk-go-v2/config v1.29.13
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.79.1
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect
