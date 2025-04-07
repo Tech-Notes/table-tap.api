@@ -51,3 +51,18 @@ func CreateTableHandler(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, internal.SuccessResponse)
 
 }
+
+func GetTableListHandler(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	businessID := BusinessIDFromContext(ctx)
+
+	tables, err := DBConn.GetTableList(ctx, businessID)
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	writeJSON(w, http.StatusOK, tables)
+}
