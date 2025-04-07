@@ -112,9 +112,9 @@ func BusinessUserPermissionsFromContext(ctx context.Context) []string {
 	return nil
 }
 
-func BusinessIDFromContext(ctx context.Context) int {
+func BusinessIDFromContext(ctx context.Context) int64 {
 	businessID := ctx.Value(internal.ContextKeyBusinessID)
-	if businessID, ok := businessID.(int); ok {
+	if businessID, ok := businessID.(int64); ok {
 		return businessID
 	}
 	return 0
