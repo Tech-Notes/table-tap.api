@@ -17,3 +17,8 @@ type OrderItem struct {
 	Price     float64 `json:"price" db:"price"`
 	CreatedAt string  `json:"created_at" db:"created_at"`
 }
+
+type OrderDetail struct {
+	*Order
+	OrderItems []*OrderItem `json:"order_items"`
+}

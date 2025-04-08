@@ -13,7 +13,7 @@ type GetMenuItemsResponse struct {
 }
 
 type GetMenuItemsSuccessResponse struct {
-	*internal.ResponseBase
+	internal.ResponseBase
 	Data *GetMenuItemsResponse `json:"data"`
 }
 
@@ -28,7 +28,7 @@ func GetMenuItemsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	writeJSON(w, http.StatusOK, GetMenuItemsSuccessResponse{
-		ResponseBase: &internal.SuccessResponse,
+		ResponseBase: internal.SuccessResponse,
 		Data: &GetMenuItemsResponse{
 			MenuItems: menuItems,
 		},

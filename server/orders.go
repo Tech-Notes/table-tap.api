@@ -16,7 +16,7 @@ type GetOrdersResponse struct {
 }
 
 type GetOrdersSuccessResponse struct {
-	*internal.ResponseBase
+	internal.ResponseBase
 	Data *GetOrdersResponse `json:"data"`
 }
 
@@ -39,7 +39,7 @@ func GetOrdersByTableIDHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	writeJSON(w, http.StatusOK, GetOrdersSuccessResponse{
-		ResponseBase: &internal.SuccessResponse,
+		ResponseBase: internal.SuccessResponse,
 		Data: &GetOrdersResponse{
 			Orders: orders,
 		},
@@ -57,9 +57,43 @@ func GetBusinessOrdersHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	writeJSON(w, http.StatusOK, GetOrdersSuccessResponse{
-		ResponseBase: &internal.SuccessResponse,
+		ResponseBase: internal.SuccessResponse,
 		Data: &GetOrdersResponse{
 			Orders: orders,
+		},
+	})
+}
+
+type GetOrderDetailByIDResponse struct {
+	Order *types.OrderDetail `json:"order"`
+}
+type GetOrderDetailByIDSuccessResponse struct {
+	internal.ResponseBase
+	Data *GetOrderDetailByIDResponse `json:"data"`
+}
+
+func GetOrderDetailByIDHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	businessID := BusinessIDFromContext(ctx)
+
+	orderIDSring := chi.URLParam(r, "order_id")
+	orderID, err := strconv.ParseInt(orderIDSring, 10, 64)
+
+	if err != nil {
+		writeError(w, http.StatusBadRequest, errors.New("order_id is required"))
+		return
+	}
+
+	orderDetail, err := DBConn.GetOrderDetailByID(ctx, businessID, orderID)
+	if err != nil && err != sql.ErrNoRows {
+		writeError(w, http.StatusInternalServerError, errors.New("failed to get order detail"))
+		return
+	}
+
+	writeJSON(w, http.StatusOK, GetOrderDetailByIDSuccessResponse{
+		ResponseBase: internal.SuccessResponse,
+		Data: &GetOrderDetailByIDResponse{
+			Order: orderDetail,
 		},
 	})
 }

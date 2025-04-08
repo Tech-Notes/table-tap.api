@@ -57,7 +57,7 @@ type GetTablesResponse struct {
 }
 
 type GetTablesSuccessResponse struct {
-	*types.ResponseBase
+	types.ResponseBase
 	Data *GetTablesResponse `json:"data"`
 }
 
@@ -74,7 +74,7 @@ func GetTablesHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	writeJSON(w, http.StatusOK, GetTablesSuccessResponse{
-		ResponseBase: &types.SuccessResponse,
+		ResponseBase: types.SuccessResponse,
 		Data: &GetTablesResponse{
 			Tables: tables,
 		},

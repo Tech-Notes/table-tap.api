@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"database/sql"
 
 	internal "github.com/table-tap/api/internal/types"
 )
@@ -39,4 +40,40 @@ func (db *DB) GetOrdersByTableID(ctx context.Context, businessID, tableID int64)
 		return nil, err
 	}
 	return orders, nil
+}
+
+func (db *DB) GetOrderDetailByID(ctx context.Context, businessID, orderID int64) (*internal.OrderDetail, error) {
+	query := `
+		SELECT o.id,
+		o.business_id, 
+		o.table_id, 
+		o.status
+		FROM orders o
+		WHERE o.business_id = $1
+		AND o.id = $2
+	`
+	orderDetail := &internal.OrderDetail{}
+	err := db.GetContext(ctx, orderDetail, query, businessID, orderID)
+	if err != nil {
+		return nil, err
+	}
+
+	orderItemsQuery := `
+		SELECT oi.id,
+		oi.item_id,
+		oi.order_id,
+		oi.qty,
+		oi.price
+		FROM order_items oi
+		WHERE oi.order_id = $1
+		AND oi.business_id = $2
+	`
+	orderItems := []*internal.OrderItem{}
+	err = db.SelectContext(ctx, &orderItems, orderItemsQuery, orderID, businessID)
+	if err != nil && err != sql.ErrNoRows {
+		return nil, err
+	}
+	orderDetail.OrderItems = orderItems
+
+	return orderDetail, nil
 }
