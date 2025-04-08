@@ -52,7 +52,16 @@ func CreateTableHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func GetTableListHandler(w http.ResponseWriter, r *http.Request) {
+type GetTablesResponse struct {
+	Tables []*types.Table `json:"tables"`
+}
+
+type GetTablesSuccessResponse struct {
+	*types.ResponseBase
+	Data *GetTablesResponse `json:"data"`
+}
+
+func GetTablesHandler(w http.ResponseWriter, r *http.Request) {
 
 	ctx := r.Context()
 
@@ -64,5 +73,10 @@ func GetTableListHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	writeJSON(w, http.StatusOK, tables)
+	writeJSON(w, http.StatusOK, GetTablesSuccessResponse{
+		ResponseBase: &types.SuccessResponse,
+		Data: &GetTablesResponse{
+			Tables: tables,
+		},
+	})
 }
