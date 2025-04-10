@@ -119,25 +119,25 @@ func ChangeOrderStatusHandler(w http.ResponseWriter, r *http.Request) {
 	orderID, err := strconv.ParseInt(orderIDSring, 10, 64)
 
 	if err != nil {
-		writeError(w, http.StatusBadRequest, errors.New("order_id is required"))
+		writeError(w, http.StatusBadRequest, ErrRequiredOrderID)
 		return
 	}
 
 	data := &ChangeOrderStatusRequest{}
 	err = readJSON(r, data)
 	if err != nil {
-		writeError(w, http.StatusInternalServerError, errors.New("failed to read status"))
+		writeError(w, http.StatusInternalServerError, ErrFailedRequestBody)
 		return
 	}
 
 	if data.Status == "" || !data.Status.IsValid() {
-		writeError(w, http.StatusBadRequest, errors.New("invalid request"))
+		writeError(w, http.StatusBadRequest, ErrInvalidOrderStatus)
 		return
 	}
 
 	err = DBConn.ChangeOrderStatus(ctx, businessID, orderID, data.Status)
 	if err != nil {
-		writeError(w, http.StatusInternalServerError, errors.New("internal server error"))
+		writeError(w, http.StatusInternalServerError, err)
 		return
 	}
 

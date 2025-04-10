@@ -2,7 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"errors"
 	"net/http"
 
 	internal "github.com/table-tap/api/internal/types"
@@ -24,7 +23,7 @@ func GetMenuItemsHandler(w http.ResponseWriter, r *http.Request) {
 	// Get menu items from the database
 	menuItems, err := DBConn.GetMenuItems(r.Context(), businessID)
 	if err != nil && err != sql.ErrNoRows {
-		writeError(w, http.StatusInternalServerError, errors.New("failed to get menu items"))
+		writeError(w, http.StatusInternalServerError, err)
 	}
 
 	writeJSON(w, http.StatusOK, GetMenuItemsSuccessResponse{
