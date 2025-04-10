@@ -77,3 +77,18 @@ func (db *DB) GetOrderDetailByID(ctx context.Context, businessID, orderID int64)
 
 	return orderDetail, nil
 }
+
+func (db *DB) ChangeOrderStatus(ctx context.Context, businessID, orderID int64, status internal.OrderStatus) error {
+	query := `
+	UPDATE orders
+	SET status = $1
+	WHERE id = $2 AND business_id = $3
+	`
+
+	_, err := db.ExecContext(ctx, query, status, orderID, businessID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

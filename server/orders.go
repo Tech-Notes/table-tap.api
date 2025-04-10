@@ -97,3 +97,54 @@ func GetOrderDetailByIDHandler(w http.ResponseWriter, r *http.Request) {
 		},
 	})
 }
+
+type ChangeOrderStatusRequest struct {
+	Status types.OrderStatus `json:"status"`
+}
+
+type ChangeOrderStatusResponse struct {
+	ID int64 `json:"id"`
+}
+
+type ChangeOrderStatusSuccessResponse struct {
+	internal.ResponseBase
+	Data *ChangeOrderStatusResponse `json:"data"`
+}
+
+func ChangeOrderStatusHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	businessID := BusinessIDFromContext(ctx)
+
+	orderIDSring := chi.URLParam(r, "order_id")
+	orderID, err := strconv.ParseInt(orderIDSring, 10, 64)
+
+	if err != nil {
+		writeError(w, http.StatusBadRequest, errors.New("order_id is required"))
+		return
+	}
+
+	data := &ChangeOrderStatusRequest{}
+	err = readJSON(r, data)
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, errors.New("failed to read status"))
+		return
+	}
+
+	if data.Status == "" || !data.Status.IsValid() {
+		writeError(w, http.StatusBadRequest, errors.New("invalid request"))
+		return
+	}
+
+	err = DBConn.ChangeOrderStatus(ctx, businessID, orderID, data.Status)
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, errors.New("internal server error"))
+		return
+	}
+
+	writeJSON(w, http.StatusOK, ChangeOrderStatusSuccessResponse{
+		ResponseBase: internal.SuccessResponse,
+		Data: &ChangeOrderStatusResponse{
+			ID: orderID,
+		},
+	})
+}
