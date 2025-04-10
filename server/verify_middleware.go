@@ -91,7 +91,7 @@ func getContext(ctx context.Context, userEmail string) (context.Context, error) 
 
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return nil, errors.New("user not found")
+			return nil, ErrUserNotFound
 		}
 		return nil, err
 	}

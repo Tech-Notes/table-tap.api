@@ -2,7 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"errors"
 	"net/http"
 	"strconv"
 
@@ -28,13 +27,13 @@ func GetOrdersByTableIDHandler(w http.ResponseWriter, r *http.Request) {
 	tableID, err := strconv.ParseInt(tableIDSring, 10, 64)
 
 	if err != nil {
-		writeError(w, http.StatusBadRequest, errors.New("table_id is required"))
+		writeError(w, http.StatusBadRequest, ErrRequiredTableID)
 		return
 	}
 
 	orders, err := DBConn.GetOrdersByTableID(ctx, businessID, tableID)
 	if err != nil && err != sql.ErrNoRows {
-		writeError(w, http.StatusInternalServerError, errors.New("failed to get orders"))
+		writeError(w, http.StatusInternalServerError, err)
 		return
 	}
 
@@ -52,7 +51,7 @@ func GetBusinessOrdersHandler(w http.ResponseWriter, r *http.Request) {
 
 	orders, err := DBConn.GetBusinessOrders(ctx, businessID)
 	if err != nil && err != sql.ErrNoRows {
-		writeError(w, http.StatusInternalServerError, errors.New("failed to get orders"))
+		writeError(w, http.StatusInternalServerError, err)
 		return
 	}
 
@@ -80,13 +79,13 @@ func GetOrderDetailByIDHandler(w http.ResponseWriter, r *http.Request) {
 	orderID, err := strconv.ParseInt(orderIDSring, 10, 64)
 
 	if err != nil {
-		writeError(w, http.StatusBadRequest, errors.New("order_id is required"))
+		writeError(w, http.StatusBadRequest, ErrRequiredOrderID)
 		return
 	}
 
 	orderDetail, err := DBConn.GetOrderDetailByID(ctx, businessID, orderID)
 	if err != nil && err != sql.ErrNoRows {
-		writeError(w, http.StatusInternalServerError, errors.New("failed to get order detail"))
+		writeError(w, http.StatusInternalServerError, err)
 		return
 	}
 

@@ -2,7 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"errors"
 	"net/http"
 	"os"
 
@@ -12,7 +11,7 @@ import (
 )
 
 type SignInRequest struct {
-	Email string `json:"email"`
+	Email    string `json:"email"`
 	Password string `json:"password"`
 }
 
@@ -37,13 +36,13 @@ func SignInHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if businessUser != nil && businessUser.ID == 0 {
-		writeError(w, http.StatusUnauthorized, errors.New("user not found"))
+		writeError(w, http.StatusUnauthorized, ErrUserNotFound)
 		return
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(businessUser.Password), []byte(payload.Password))
 	if err != nil {
-		writeError(w, http.StatusUnauthorized, errors.New("invalid credentials"))
+		writeError(w, http.StatusUnauthorized, ErrInvalidCredentials)
 		return
 	}
 
