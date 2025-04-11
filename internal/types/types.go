@@ -7,6 +7,7 @@ const (
 	ContextkeyUserEmail   ContextKey = "user_email"
 	ContextKeyBusinessID  ContextKey = "business_id"
 	ContextKeyPermissions ContextKey = "permissions"
+	ContextKeyTableID     ContextKey = "table_id"
 )
 
 type TokenClaim struct {
