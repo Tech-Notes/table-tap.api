@@ -1,9 +1,15 @@
 package main
 
-import "github.com/go-chi/chi"
+import (
+	"github.com/go-chi/chi"
+	"github.com/table-tap/api/shopper"
+)
 
 func GetRootRouter() *chi.Mux {
 	r := chi.NewRouter()
+
+	// client's routes
+	r.Mount("/s", shopper.GetRouter())
 
 	r.Mount("/api", getApiRouter())
 
