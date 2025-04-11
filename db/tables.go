@@ -36,3 +36,21 @@ func (db *DB) GetTableList(ctx context.Context, businessID int64) ([]*internal.T
 
 	return tables, nil
 }
+
+func (db *DB) GetTableByToken(ctx context.Context, token string) (*internal.Table, error) {
+	query := `
+	SELECT id,
+	business_id,
+	status,
+	qr_code_url
+	FROM tables
+	WHERE token = $1
+	`
+	table := &internal.Table{}
+	err := db.GetContext(ctx, table, query, token)
+	if err != nil {
+		return nil, err
+	}
+
+	return table, nil
+}
