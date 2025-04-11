@@ -7,15 +7,6 @@ import (
 	internal "github.com/table-tap/api/internal/types"
 )
 
-type GetOrdersResponse struct {
-	Orders []*internal.Order `json:"orders"`
-}
-
-type GetOrdersSuccessResponse struct {
-	internal.ResponseBase
-	Data *GetOrdersResponse `json:"data"`
-}
-
 func GetOrdersByTableIDHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	businessID := businessIDFromContext(ctx)
@@ -28,9 +19,9 @@ func GetOrdersByTableIDHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	writeJSON(w, http.StatusOK, GetOrdersSuccessResponse{
+	writeJSON(w, http.StatusOK, internal.GetOrdersSuccessResponse{
 		ResponseBase: internal.SuccessResponse,
-		Data: &GetOrdersResponse{
+		Data: &internal.GetOrdersResponse{
 			Orders: orders,
 		},
 	})

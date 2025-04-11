@@ -7,17 +7,7 @@ import (
 
 	"github.com/go-chi/chi"
 	internal "github.com/table-tap/api/internal/types"
-	types "github.com/table-tap/api/internal/types"
 )
-
-type GetOrdersResponse struct {
-	Orders []*types.Order `json:"orders"`
-}
-
-type GetOrdersSuccessResponse struct {
-	internal.ResponseBase
-	Data *GetOrdersResponse `json:"data"`
-}
 
 func GetOrdersByTableIDHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
@@ -37,9 +27,9 @@ func GetOrdersByTableIDHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	writeJSON(w, http.StatusOK, GetOrdersSuccessResponse{
+	writeJSON(w, http.StatusOK, internal.GetOrdersSuccessResponse{
 		ResponseBase: internal.SuccessResponse,
-		Data: &GetOrdersResponse{
+		Data: &internal.GetOrdersResponse{
 			Orders: orders,
 		},
 	})
@@ -55,16 +45,16 @@ func GetBusinessOrdersHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	writeJSON(w, http.StatusOK, GetOrdersSuccessResponse{
+	writeJSON(w, http.StatusOK, internal.GetOrdersSuccessResponse{
 		ResponseBase: internal.SuccessResponse,
-		Data: &GetOrdersResponse{
+		Data: &internal.GetOrdersResponse{
 			Orders: orders,
 		},
 	})
 }
 
 type GetOrderDetailByIDResponse struct {
-	Order *types.OrderDetail `json:"order"`
+	Order *internal.OrderDetail `json:"order"`
 }
 type GetOrderDetailByIDSuccessResponse struct {
 	internal.ResponseBase
@@ -98,7 +88,7 @@ func GetOrderDetailByIDHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 type ChangeOrderStatusRequest struct {
-	Status types.OrderStatus `json:"status"`
+	Status internal.OrderStatus `json:"status"`
 }
 
 type ChangeOrderStatusResponse struct {

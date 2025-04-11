@@ -43,3 +43,12 @@ func (status OrderStatus) IsValid() bool {
 		return false
 	}
 }
+
+type GetOrdersResponse struct {
+	Orders []*Order `json:"orders"`
+}
+
+type GetOrdersSuccessResponse struct {
+	ResponseBase
+	Data *GetOrdersResponse `json:"data"`
+}
