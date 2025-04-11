@@ -46,11 +46,11 @@ go run .
 ## Database tables migration guide
    First a all, you have to install [golang-migrate cli](https://github.com/golang-migrate/migrate/tree/master/cmd/migrate) in your system and *cd to table-tap.api *.
 
-## Install dotenv-cli
+ **Install dotenv-cli**
 
     npm install -g dotenv-cli
 
-### Database migration is simply done by running **'make'** command from cli.
+#### Database migration is simply done by running **'make'** commands from cli.
 
  **migration up:**
      
@@ -60,7 +60,7 @@ go run .
  
      dotenv make migration_down
 
-### Or if your system can't use **'make'** command,
+#### Or if your system can't use **'make'** command,
 
  **migration up:**
  
@@ -69,4 +69,34 @@ go run .
  **migration down:**
  
      migrate -path ./migrations/ -database "postgresql://username:password@localhost:5432/database_name?sslmode=disable" -verbose down
+
  
+## Project structure
+
+There are four main packages.
+
+   ### 1. main ( folder:  server )
+   *This package have main router setup and handlers for admin and kitchen dashboards.* 
+     
+   ### 2. db ( folder: db )
+   *Database functions which is used by both main and shopper packages' handlers.*
+     
+   ### 3. shopper ( folder: shopper )
+   *This package is for handling clients (shoppers)'s requests like placing orders.*
+   
+   ### 4. internal ( folder: internal )
+   *This package is a common package for all packages. There are three main folders under this package.*
+   
+   - http <br>
+     *http reader and writer methods for handlers.*
+   - types <br>
+     *common types used by all packages.*
+   - utils <br>
+     *common methods for all packages like uploading photo to s3.*
+
+### Other folders
+
+   **1. migrations** <br>
+   *Database migrations files*
+      
+     
