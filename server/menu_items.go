@@ -7,15 +7,6 @@ import (
 	internal "github.com/table-tap/api/internal/types"
 )
 
-type GetMenuItemsResponse struct {
-	MenuItems []*internal.MenuItem `json:"menu_items"`
-}
-
-type GetMenuItemsSuccessResponse struct {
-	internal.ResponseBase
-	Data *GetMenuItemsResponse `json:"data"`
-}
-
 func GetMenuItemsHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	businessID := BusinessIDFromContext(ctx)
@@ -26,9 +17,9 @@ func GetMenuItemsHandler(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusInternalServerError, err)
 	}
 
-	writeJSON(w, http.StatusOK, GetMenuItemsSuccessResponse{
+	writeJSON(w, http.StatusOK, internal.GetMenuItemsSuccessResponse{
 		ResponseBase: internal.SuccessResponse,
-		Data: &GetMenuItemsResponse{
+		Data: &internal.GetMenuItemsResponse{
 			MenuItems: menuItems,
 		},
 	})

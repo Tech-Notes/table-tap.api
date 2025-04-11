@@ -14,3 +14,12 @@ type MenuItem struct {
 	CreatedAt   string      `json:"created_at" db:"created_at"`
 	UpdatedAt   string      `json:"updated_at" db:"updated_at"`
 }
+
+type GetMenuItemsResponse struct {
+	MenuItems []*MenuItem `json:"menu_items"`
+}
+
+type GetMenuItemsSuccessResponse struct {
+	ResponseBase
+	Data *GetMenuItemsResponse `json:"data"`
+}
