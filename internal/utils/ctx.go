@@ -1,14 +1,14 @@
-package internal
+package utils
 
 import (
 	"context"
 
 	"github.com/lib/pq"
-	internal "github.com/table-tap/api/internal/types"
+	types "github.com/table-tap/api/internal/types"
 )
 
 func BusinessUserPermissionsFromContext(ctx context.Context) []string {
-	permissions := ctx.Value(internal.ContextKeyPermissions)
+	permissions := ctx.Value(types.ContextKeyPermissions)
 	if permissions, ok := permissions.(pq.StringArray); ok {
 		return permissions
 	}
@@ -16,7 +16,7 @@ func BusinessUserPermissionsFromContext(ctx context.Context) []string {
 }
 
 func BusinessIDFromContext(ctx context.Context) int64 {
-	businessID := ctx.Value(internal.ContextKeyBusinessID)
+	businessID := ctx.Value(types.ContextKeyBusinessID)
 	if businessID, ok := businessID.(int64); ok {
 		return businessID
 	}
@@ -24,7 +24,7 @@ func BusinessIDFromContext(ctx context.Context) int64 {
 }
 
 func TableIDFromContext(ctx context.Context) int64 {
-	tableID := ctx.Value(internal.ContextKeyTableID)
+	tableID := ctx.Value(types.ContextKeyTableID)
 	if tableID, ok := tableID.(int64); ok {
 		return tableID
 	}
