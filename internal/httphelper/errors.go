@@ -1,4 +1,4 @@
-package internal
+package httphelper
 
 import (
 	"net/http"
