@@ -3,7 +3,7 @@ package shopper
 import (
 	"net/http"
 
-	internal "github.com/table-tap/api/internal/http"
+	internal "github.com/table-tap/api/internal"
 )
 
 func readJSON(r *http.Request, dst any) error {
