@@ -15,6 +15,11 @@ func GetRouter() *chi.Mux {
 		r.Post("/", CreateOrderHandler)
 	})
 
+	//notifications
+	shopper.Route("/notifications", func(noti chi.Router) {
+		noti.Get("/", NewOrderNotificationHandler)
+	})
+
 	r := chi.NewRouter()
 	r.Mount("/api/v1", shopper)
 

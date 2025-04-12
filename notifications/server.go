@@ -39,6 +39,8 @@ func (s *Server) HandleWS(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	tableID := utils.TableIDFromContext(ctx)
+
 	conn, err := s.Upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Println("WebSocket upgrade error:", err)
@@ -47,6 +49,11 @@ func (s *Server) HandleWS(w http.ResponseWriter, r *http.Request) {
 	defer conn.Close()
 
 	channel := fmt.Sprintf("orders.business:%d", businessID)
+
+	if tableID != 0 {
+		channel = fmt.Sprintf("orders.table:%d", tableID)
+	}
+	
 	sub := s.Redis.Subscribe(ctx, channel)
 	defer sub.Close()
 

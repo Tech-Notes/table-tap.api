@@ -129,13 +129,19 @@ func ChangeOrderStatusHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	NotificationServer.PublishOrderNotification(businessID, &types.OrderStatusUpdateNotiPayload{
+	notificationPayload := &types.OrderStatusUpdateNotiPayload{
 		OrderID:     orderID,
 		Type:        types.NotificationTypeUpdateOrderStatus,
 		TableNumber: order.TableID,
 		Status:      data.Status,
 		UpdatedAt:   time.Now().Format(time.RFC3339),
-	})
+	}
+
+	// notify admin and kitchen
+	NotificationServer.PublishOrderNotification(businessID, notificationPayload)
+
+	// notify shopper
+	NotificationServer.PublishOrderNotificationToShopper(order.TableID, notificationPayload)
 
 	writeJSON(w, http.StatusOK, types.ActionSuccessResponse{
 		ResponseBase: types.SuccessResponse,
