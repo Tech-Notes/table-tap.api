@@ -44,7 +44,7 @@ go run .
 ```
 
 ## Database tables migration guide
-   First a all, you have to install [golang-migrate cli](https://github.com/golang-migrate/migrate/tree/master/cmd/migrate) in your system and *cd to table-tap.api *.
+   First a all, you have to install [golang-migrate cli](https://github.com/golang-migrate/migrate/tree/master/cmd/migrate) in your system and *cd to table-tap.api*.
 
  **Install dotenv-cli**
 
@@ -73,7 +73,7 @@ go run .
  
 ## Project structure
 
-There are four main packages.
+There are seven packages.
 
    ### 1. main ( folder:  server )
    *This package have main router setup and handlers for admin and kitchen dashboards.* 
@@ -84,15 +84,17 @@ There are four main packages.
    ### 3. shopper ( folder: shopper )
    *This package is for handling clients (shoppers)'s requests like placing orders.*
    
-   ### 4. internal ( folder: internal )
-   *This package is a common package for all packages. There are three main folders under this package.*
+   ### 4. httphelper (folder: internal/httphelper )
+   *http reader and writer methods for handlers.*
+
+   ### 5. types ( folder: internal/types )
+   *common types used by all packages.*
    
-   - http <br>
-     *http reader and writer methods for handlers.*
-   - types <br>
-     *common types used by all packages.*
-   - utils <br>
-     *common methods for all packages like uploading photo to s3.*
+   ### 6. utils ( folder: internal/utils )
+   *common methods for all packages like uploading photo to s3.*
+
+   ### 7. notifications ( folder: notifications )
+   *notifications system.*
 
 ### Other folders
 
