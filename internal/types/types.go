@@ -18,11 +18,11 @@ type TokenClaim struct {
 	RoleID     int64  `json:"role_id"`
 }
 
-type CreateSuccessResponseData struct {
+type ActionSuccessResponseData struct {
 	ID int64 `json:"id"`
 }
 
-type CreateSuccessResponse struct {
+type ActionSuccessResponse struct {
 	ResponseBase
-	Data *CreateSuccessResponseData `json:"data"`
+	Data *ActionSuccessResponseData `json:"data"`
 }

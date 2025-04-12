@@ -39,9 +39,9 @@ func CreateOrderHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	writeJSON(w, http.StatusOK, internal.CreateSuccessResponse{
+	writeJSON(w, http.StatusCreated, internal.ActionSuccessResponse{
 		ResponseBase: internal.SuccessResponse,
-		Data: &internal.CreateSuccessResponseData{
+		Data: &internal.ActionSuccessResponseData{
 			ID: id,
 		},
 	})

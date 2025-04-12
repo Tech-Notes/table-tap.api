@@ -25,15 +25,6 @@ func GetMenuItemsHandler(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-type CreateMenuItemResponse struct {
-	ID int64 `json:"id"`
-}
-
-type CreateMenuItemSuccessResponse struct {
-	internal.ResponseBase
-	Data *CreateMenuItemResponse `json:"data"`
-}
-
 func CreateMenuItemHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	businessID := BusinessIDFromContext(ctx)
@@ -51,9 +42,9 @@ func CreateMenuItemHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	writeJSON(w, http.StatusCreated, CreateMenuItemSuccessResponse{
+	writeJSON(w, http.StatusCreated, internal.ActionSuccessResponse{
 		ResponseBase: internal.SuccessResponse,
-		Data: &CreateMenuItemResponse{
+		Data: &internal.ActionSuccessResponseData{
 			ID: id,
 		},
 	})

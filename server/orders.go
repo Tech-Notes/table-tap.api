@@ -91,15 +91,6 @@ type ChangeOrderStatusRequest struct {
 	Status internal.OrderStatus `json:"status"`
 }
 
-type ChangeOrderStatusResponse struct {
-	ID int64 `json:"id"`
-}
-
-type ChangeOrderStatusSuccessResponse struct {
-	internal.ResponseBase
-	Data *ChangeOrderStatusResponse `json:"data"`
-}
-
 func ChangeOrderStatusHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	businessID := BusinessIDFromContext(ctx)
@@ -130,9 +121,9 @@ func ChangeOrderStatusHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	writeJSON(w, http.StatusOK, ChangeOrderStatusSuccessResponse{
+	writeJSON(w, http.StatusOK, internal.ActionSuccessResponse{
 		ResponseBase: internal.SuccessResponse,
-		Data: &ChangeOrderStatusResponse{
+		Data: &internal.ActionSuccessResponseData{
 			ID: orderID,
 		},
 	})

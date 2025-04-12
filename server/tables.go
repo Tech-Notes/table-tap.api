@@ -5,7 +5,6 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/skip2/go-qrcode"
-	internal "github.com/table-tap/api/internal/types"
 	types "github.com/table-tap/api/internal/types"
 	utils "github.com/table-tap/api/internal/utils"
 )
@@ -42,13 +41,18 @@ func CreateTableHandler(w http.ResponseWriter, r *http.Request) {
 		Token:      secureToken,
 	}
 
-	_, err = DBConn.CreateTable(ctx, table)
+	id, err := DBConn.CreateTable(ctx, table)
 	if err != nil {
 		writeError(w, http.StatusInternalServerError, err)
 		return
 	}
 
-	writeJSON(w, http.StatusOK, internal.SuccessResponse)
+	writeJSON(w, http.StatusCreated, types.ActionSuccessResponse{
+		ResponseBase: types.SuccessResponse,
+		Data: &types.ActionSuccessResponseData{
+			ID: id,
+		},
+	})
 
 }
 
