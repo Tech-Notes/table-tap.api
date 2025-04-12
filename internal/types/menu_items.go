@@ -1,4 +1,4 @@
-package internal
+package types
 
 import "gopkg.in/guregu/null.v4"
 

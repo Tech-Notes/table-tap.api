@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	internal "github.com/table-tap/api/internal/types"
+	"github.com/table-tap/api/internal/types"
 )
 
 func verify(h http.Handler) http.Handler {
@@ -27,8 +27,8 @@ func verify(h http.Handler) http.Handler {
 			return
 		}
 
-		ctx = context.WithValue(ctx, internal.ContextKeyBusinessID, table.BusinessID)
-		ctx = context.WithValue(ctx, internal.ContextKeyTableID, table.ID)
+		ctx = context.WithValue(ctx, types.ContextKeyBusinessID, table.BusinessID)
+		ctx = context.WithValue(ctx, types.ContextKeyTableID, table.ID)
 		
 		h.ServeHTTP(w, r.WithContext(ctx))
 	})

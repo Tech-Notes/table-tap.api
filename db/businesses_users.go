@@ -3,10 +3,10 @@ package db
 import (
 	"context"
 
-	internal "github.com/table-tap/api/internal/types"
+	"github.com/table-tap/api/internal/types"
 )
 
-func (db *DB) GetLastActiveBusinessUserByEmail(ctx context.Context, email string) (*internal.BusinessUser, error) {
+func (db *DB) GetLastActiveBusinessUserByEmail(ctx context.Context, email string) (*types.BusinessUser, error) {
 
 	query := `
 	WITH permissions AS (
@@ -37,7 +37,7 @@ func (db *DB) GetLastActiveBusinessUserByEmail(ctx context.Context, email string
 	LIMIT 1
 	`
 
-	businessUser := &internal.BusinessUser{}
+	businessUser := &types.BusinessUser{}
 
 	err := db.GetContext(ctx, businessUser, query, email)
 	if err != nil {

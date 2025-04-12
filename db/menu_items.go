@@ -3,10 +3,10 @@ package db
 import (
 	"context"
 
-	internal "github.com/table-tap/api/internal/types"
+	"github.com/table-tap/api/internal/types"
 )
 
-func (db *DB) GetMenuItems(ctx context.Context, businessID int64) ([]*internal.MenuItem, error) {
+func (db *DB) GetMenuItems(ctx context.Context, businessID int64) ([]*types.MenuItem, error) {
 	query := `SELECT id,
 	name, 
 	description, 
@@ -17,7 +17,7 @@ func (db *DB) GetMenuItems(ctx context.Context, businessID int64) ([]*internal.M
 	category_id 
 	FROM menu_items WHERE business_id = $1`
 
-	menuItems := []*internal.MenuItem{}
+	menuItems := []*types.MenuItem{}
 	err := db.SelectContext(ctx, &menuItems, query, businessID)
 	if err != nil {
 		return nil, err
@@ -26,7 +26,7 @@ func (db *DB) GetMenuItems(ctx context.Context, businessID int64) ([]*internal.M
 	return menuItems, nil
 }
 
-func (db *DB) CreateMenuItem(ctx context.Context, businessID int64, item *internal.MenuItem) (int64, error) {
+func (db *DB) CreateMenuItem(ctx context.Context, businessID int64, item *types.MenuItem) (int64, error) {
 	query := `
 	INSERT INTO menu_items (name, description, price, business_id, photo_id, category, category_id)
 	VALUES (:name, :description, :price, :business_id, :photo_id, :category, :category_id)

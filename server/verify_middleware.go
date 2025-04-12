@@ -10,7 +10,7 @@ import (
 	"net/http"
 	"os"
 
-	internal "github.com/table-tap/api/internal/types"
+	"github.com/table-tap/api/internal/types"
 )
 
 func verify(h http.Handler) http.Handler {
@@ -95,10 +95,10 @@ func getContext(ctx context.Context, userEmail string) (context.Context, error) 
 		return nil, err
 	}
 
-	ctx = context.WithValue(ctx, internal.ContextkeyUserEmail, userEmail)
-	ctx = context.WithValue(ctx, internal.ContextKeyUserID, businessUser.ID)
-	ctx = context.WithValue(ctx, internal.ContextKeyBusinessID, businessUser.BusinessID)
-	ctx = context.WithValue(ctx, internal.ContextKeyPermissions, businessUser.Permissions)
+	ctx = context.WithValue(ctx, types.ContextkeyUserEmail, userEmail)
+	ctx = context.WithValue(ctx, types.ContextKeyUserID, businessUser.ID)
+	ctx = context.WithValue(ctx, types.ContextKeyBusinessID, businessUser.BusinessID)
+	ctx = context.WithValue(ctx, types.ContextKeyPermissions, businessUser.Permissions)
 
 	return ctx, nil
 }

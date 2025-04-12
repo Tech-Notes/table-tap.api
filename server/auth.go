@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/golang-jwt/jwt"
-	internal "github.com/table-tap/api/internal/types"
+	"github.com/table-tap/api/internal/types"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -16,7 +16,7 @@ type SignInRequest struct {
 }
 
 type SignInSuccessResponse struct {
-	*internal.ResponseBase
+	*types.ResponseBase
 	Token string `json:"token"`
 }
 
@@ -53,12 +53,12 @@ func SignInHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	writeJSON(w, http.StatusOK, SignInSuccessResponse{
-		ResponseBase: &internal.SuccessResponse,
+		ResponseBase: &types.SuccessResponse,
 		Token:        token,
 	})
 }
 
-func generateToken(businessUser *internal.BusinessUser) (string, error) {
+func generateToken(businessUser *types.BusinessUser) (string, error) {
 	// create claims
 	claims := jwt.MapClaims{
 		"user_id":     businessUser.ID,

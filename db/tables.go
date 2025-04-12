@@ -3,10 +3,10 @@ package db
 import (
 	"context"
 
-	internal "github.com/table-tap/api/internal/types"
+	"github.com/table-tap/api/internal/types"
 )
 
-func (db *DB) CreateTable(ctx context.Context, table *internal.Table) (int64, error) {
+func (db *DB) CreateTable(ctx context.Context, table *types.Table) (int64, error) {
 	
 	query := `
 		INSERT INTO tables (business_id, qr_code_url, status, token)
@@ -21,14 +21,14 @@ func (db *DB) CreateTable(ctx context.Context, table *internal.Table) (int64, er
 	return id, nil
 }
 
-func (db *DB) GetTableList(ctx context.Context, businessID int64) ([]*internal.Table, error) {
+func (db *DB) GetTableList(ctx context.Context, businessID int64) ([]*types.Table, error) {
 	
 	query := `
 		SELECT id, business_id, qr_code_url, status, token
 		FROM tables
 		WHERE business_id = $1`
 
-	var tables []*internal.Table
+	var tables []*types.Table
 	err := db.SelectContext(ctx, &tables, query, businessID)
 	if err != nil {
 		return nil, err
@@ -37,7 +37,7 @@ func (db *DB) GetTableList(ctx context.Context, businessID int64) ([]*internal.T
 	return tables, nil
 }
 
-func (db *DB) GetTableByToken(ctx context.Context, token string) (*internal.Table, error) {
+func (db *DB) GetTableByToken(ctx context.Context, token string) (*types.Table, error) {
 	query := `
 	SELECT id,
 	business_id,
@@ -46,7 +46,7 @@ func (db *DB) GetTableByToken(ctx context.Context, token string) (*internal.Tabl
 	FROM tables
 	WHERE token = $1
 	`
-	table := &internal.Table{}
+	table := &types.Table{}
 	err := db.GetContext(ctx, table, query, token)
 	if err != nil {
 		return nil, err

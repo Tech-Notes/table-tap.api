@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"net/http"
 
-	internal "github.com/table-tap/api/internal/types"
+	"github.com/table-tap/api/internal/types"
 	utils "github.com/table-tap/api/internal/utils"
 )
 
@@ -18,9 +18,9 @@ func GetMenuItemsHandler(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusInternalServerError, err)
 	}
 
-	writeJSON(w, http.StatusOK, internal.GetMenuItemsSuccessResponse{
-		ResponseBase: internal.SuccessResponse,
-		Data: &internal.GetMenuItemsResponse{
+	writeJSON(w, http.StatusOK, types.GetMenuItemsSuccessResponse{
+		ResponseBase: types.SuccessResponse,
+		Data: &types.GetMenuItemsResponse{
 			MenuItems: menuItems,
 		},
 	})
@@ -30,7 +30,7 @@ func CreateMenuItemHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	businessID := utils.BusinessIDFromContext(ctx)
 
-	item := &internal.MenuItem{}
+	item := &types.MenuItem{}
 	err := readJSON(r, item)
 	if err != nil {
 		writeError(w, http.StatusBadRequest, ErrFailedRequestBody)
@@ -43,9 +43,9 @@ func CreateMenuItemHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	writeJSON(w, http.StatusCreated, internal.ActionSuccessResponse{
-		ResponseBase: internal.SuccessResponse,
-		Data: &internal.ActionSuccessResponseData{
+	writeJSON(w, http.StatusCreated, types.ActionSuccessResponse{
+		ResponseBase: types.SuccessResponse,
+		Data: &types.ActionSuccessResponseData{
 			ID: id,
 		},
 	})

@@ -1,4 +1,4 @@
-package internal
+package types
 
 type Table struct {
 	ID         int64  `json:"id" db:"id"`

@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"net/http"
 
-	internal "github.com/table-tap/api/internal/types"
+	"github.com/table-tap/api/internal/types"
 	utils "github.com/table-tap/api/internal/utils"
 )
 
@@ -18,9 +18,9 @@ func GetMenuItemsHandler(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusInternalServerError, err)
 	}
 
-	writeJSON(w, http.StatusOK, internal.GetMenuItemsSuccessResponse{
-		ResponseBase: internal.SuccessResponse,
-		Data: &internal.GetMenuItemsResponse{
+	writeJSON(w, http.StatusOK, types.GetMenuItemsSuccessResponse{
+		ResponseBase: types.SuccessResponse,
+		Data: &types.GetMenuItemsResponse{
 			MenuItems: menuItems,
 		},
 	})

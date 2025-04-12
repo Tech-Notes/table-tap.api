@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/go-chi/chi"
-	internal "github.com/table-tap/api/internal/types"
+	"github.com/table-tap/api/internal/types"
 	utils "github.com/table-tap/api/internal/utils"
 )
 
@@ -28,9 +28,9 @@ func GetOrdersByTableIDHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	writeJSON(w, http.StatusOK, internal.GetOrdersSuccessResponse{
-		ResponseBase: internal.SuccessResponse,
-		Data: &internal.GetOrdersResponse{
+	writeJSON(w, http.StatusOK, types.GetOrdersSuccessResponse{
+		ResponseBase: types.SuccessResponse,
+		Data: &types.GetOrdersResponse{
 			Orders: orders,
 		},
 	})
@@ -46,19 +46,19 @@ func GetBusinessOrdersHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	writeJSON(w, http.StatusOK, internal.GetOrdersSuccessResponse{
-		ResponseBase: internal.SuccessResponse,
-		Data: &internal.GetOrdersResponse{
+	writeJSON(w, http.StatusOK, types.GetOrdersSuccessResponse{
+		ResponseBase: types.SuccessResponse,
+		Data: &types.GetOrdersResponse{
 			Orders: orders,
 		},
 	})
 }
 
 type GetOrderDetailByIDResponse struct {
-	Order *internal.OrderDetail `json:"order"`
+	Order *types.OrderDetail `json:"order"`
 }
 type GetOrderDetailByIDSuccessResponse struct {
-	internal.ResponseBase
+	types.ResponseBase
 	Data *GetOrderDetailByIDResponse `json:"data"`
 }
 
@@ -81,7 +81,7 @@ func GetOrderDetailByIDHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	writeJSON(w, http.StatusOK, GetOrderDetailByIDSuccessResponse{
-		ResponseBase: internal.SuccessResponse,
+		ResponseBase: types.SuccessResponse,
 		Data: &GetOrderDetailByIDResponse{
 			Order: orderDetail,
 		},
@@ -89,7 +89,7 @@ func GetOrderDetailByIDHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 type ChangeOrderStatusRequest struct {
-	Status internal.OrderStatus `json:"status"`
+	Status types.OrderStatus `json:"status"`
 }
 
 func ChangeOrderStatusHandler(w http.ResponseWriter, r *http.Request) {
@@ -122,9 +122,9 @@ func ChangeOrderStatusHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	writeJSON(w, http.StatusOK, internal.ActionSuccessResponse{
-		ResponseBase: internal.SuccessResponse,
-		Data: &internal.ActionSuccessResponseData{
+	writeJSON(w, http.StatusOK, types.ActionSuccessResponse{
+		ResponseBase: types.SuccessResponse,
+		Data: &types.ActionSuccessResponseData{
 			ID: orderID,
 		},
 	})
