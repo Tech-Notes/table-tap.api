@@ -1,11 +1,16 @@
 package notifications
 
 import (
-    "context"
-    "fmt"
+	"context"
+	"encoding/json"
+	"fmt"
 )
 
-func (s *Server) PublishOrder(businessID, message string) error {
-    channel := fmt.Sprintf("new:orders.business:%s", businessID)
-    return s.Redis.Publish(context.Background(), channel, message).Err()
+func (s *Server) PublishOrder(businessID int64, payload any) error {
+    channel := fmt.Sprintf("orders.business:%d", businessID)
+    msg, err := json.Marshal(payload)
+    if err != nil {
+        return err
+    }
+    return s.Redis.Publish(context.Background(), channel, msg).Err()
 }

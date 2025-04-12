@@ -46,6 +46,11 @@ func getApiRouter() *chi.Mux {
 		tables.Get("/", authorizeHandler(DashboardView, GetTablesHandler))
 	})
 
+	//notifications
+	v1.Route("/notifications", func(noti chi.Router) {
+		noti.Get("/", authorizeHandler(DashboardView, NewOrderNotificationHandler))
+	})
+
 	api.Mount("/v1", v1)
 
 	return api

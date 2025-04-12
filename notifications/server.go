@@ -15,8 +15,12 @@ type Server struct {
 	Upgrader websocket.Upgrader
 }
 
-func NewServer(redisAddr string) *Server {
-	rdb := redis.NewClient(&redis.Options{Addr: redisAddr})
+type Options struct {
+	RedisAddr string
+}
+
+func NewServer(options *Options) *Server {
+	rdb := redis.NewClient(&redis.Options{Addr: options.RedisAddr})
 
 	return &Server{
 		Redis: rdb,
@@ -42,7 +46,7 @@ func (s *Server) HandleWS(w http.ResponseWriter, r *http.Request) {
 	}
 	defer conn.Close()
 
-	channel := fmt.Sprintf("new:orders.business:%d", businessID)
+	channel := fmt.Sprintf("orders.business:%d", businessID)
 	sub := s.Redis.Subscribe(ctx, channel)
 	defer sub.Close()
 

@@ -12,10 +12,12 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
 	"github.com/table-tap/api/db"
+	"github.com/table-tap/api/notifications"
 )
 
 var (
 	DBConn *db.DB
+	NotificationServer *notifications.Server
 )
 
 func main() {
@@ -30,6 +32,16 @@ func main() {
 	}
 
 	DBConn = openDB()
+
+	// notifications
+	redisURL := os.Getenv("REDIS_URL")
+	if redisURL == "" {
+		panic("NO REDIS URL IN env")
+	}
+	
+	NotificationServer = notifications.NewServer(&notifications.Options{
+		RedisAddr: redisURL,
+	})
 
 	port := os.Getenv("PORT")
 	log.Printf("port:%s\n", port)
