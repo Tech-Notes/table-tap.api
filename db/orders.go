@@ -92,3 +92,24 @@ func (db *DB) ChangeOrderStatus(ctx context.Context, businessID, orderID int64, 
 
 	return nil
 }
+
+func (db *DB) CreateOrder(ctx context.Context, businessID, tableID int64) (int64, error) {
+	query := `
+	INSERT INTO orders (business_id, table_id, status)
+	VALUES (:business_id, :table_id, :status)
+	RETURNING id
+	`
+
+	args := map[string]interface{}{
+		"business_id": businessID,
+		"table_id":   tableID,
+		"status":     internal.OrderStatusPending,
+	}
+
+	orderID, err := db.InsertxContext(ctx, query, args)
+	if err != nil {
+		return 0, err
+	}
+	
+	return orderID, nil
+}

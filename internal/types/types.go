@@ -17,3 +17,12 @@ type TokenClaim struct {
 	Role       string `json:"role"`
 	RoleID     int64  `json:"role_id"`
 }
+
+type CreateSuccessResponseData struct {
+	ID int64 `json:"id"`
+}
+
+type CreateSuccessResponse struct {
+	ResponseBase
+	Data *CreateSuccessResponseData `json:"data"`
+}

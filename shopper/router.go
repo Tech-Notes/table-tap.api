@@ -11,6 +11,10 @@ func GetRouter() *chi.Mux {
 		menuItems.Get("/", GetMenuItemsHandler)
 	})
 
+	shopper.Route("/orders", func(r chi.Router) {
+		r.Post("/", CreateOrderHandler)
+	})
+
 	r := chi.NewRouter()
 	r.Mount("/api/v1", shopper)
 

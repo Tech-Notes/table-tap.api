@@ -26,3 +26,23 @@ func GetOrdersByTableIDHandler(w http.ResponseWriter, r *http.Request) {
 		},
 	})
 }
+
+func CreateOrderHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	businessID := businessIDFromContext(ctx)
+
+	tableID := tableIDFromContext(ctx)
+
+	id, err := DBConn.CreateOrder(ctx, businessID, tableID)
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	writeJSON(w, http.StatusOK, internal.CreateSuccessResponse{
+		ResponseBase: internal.SuccessResponse,
+		Data: &internal.CreateSuccessResponseData{
+			ID: id,
+		},
+	})
+}
