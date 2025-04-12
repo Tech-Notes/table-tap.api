@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/go-chi/chi"
 	"github.com/table-tap/api/internal/types"
@@ -116,11 +117,25 @@ func ChangeOrderStatusHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	order, err := DBConn.GetOrderByID(ctx, businessID, orderID)
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, err)
+		return
+	}
+
 	err = DBConn.ChangeOrderStatus(ctx, businessID, orderID, data.Status)
 	if err != nil {
 		writeError(w, http.StatusInternalServerError, err)
 		return
 	}
+
+	NotificationServer.PublishOrderNotification(businessID, &types.OrderStatusUpdateNotiPayload{
+		OrderID:     orderID,
+		Type:        types.NotificationTypeUpdateOrderStatus,
+		TableNumber: order.TableID,
+		Status:      data.Status,
+		UpdatedAt:   time.Now().Format(time.RFC3339),
+	})
 
 	writeJSON(w, http.StatusOK, types.ActionSuccessResponse{
 		ResponseBase: types.SuccessResponse,

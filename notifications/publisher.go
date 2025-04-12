@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-func (s *Server) PublishOrder(businessID int64, payload any) error {
+func (s *Server) PublishOrderNotification(businessID int64, payload any) error {
     channel := fmt.Sprintf("orders.business:%d", businessID)
     msg, err := json.Marshal(payload)
     if err != nil {

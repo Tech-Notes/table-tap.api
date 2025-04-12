@@ -113,3 +113,21 @@ func (db *DB) CreateOrder(ctx context.Context, businessID, tableID int64) (int64
 	
 	return orderID, nil
 }
+
+func (db *DB) GetOrderByID(ctx context.Context, businessID, orderID int64) (*types.Order, error) {
+	query := `
+		SELECT o.id,
+		o.business_id, 
+		o.table_id, 
+		o.status
+		FROM orders o
+		WHERE o.business_id = $1
+		AND o.id = $2
+	`
+	order := &types.Order{}
+	err := db.GetContext(ctx, order, query, businessID, orderID)
+	if err != nil {
+		return nil, err
+	}
+	return order, nil
+}

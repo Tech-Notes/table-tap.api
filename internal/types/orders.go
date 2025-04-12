@@ -52,3 +52,26 @@ type GetOrdersSuccessResponse struct {
 	ResponseBase
 	Data *GetOrdersResponse `json:"data"`
 }
+
+type NotificationType string
+
+const (
+	NotificationTypeNewOrder          NotificationType = "new_order"
+	NotificationTypeUpdateOrderStatus NotificationType = "update_order_status"
+)
+
+type NewOrderNotiPayload struct {
+	OrderID     int64            `json:"order_id"`
+	Type        NotificationType `json:"type"`
+	TableNumber int64            `json:"table_number"`
+	Status      OrderStatus      `json:"status"`
+	CreatedAt   string           `json:"created_at"`
+}
+
+type OrderStatusUpdateNotiPayload struct {
+	OrderID     int64            `json:"order_id"`
+	Type        NotificationType `json:"type"`
+	TableNumber int64            `json:"table_number"`
+	Status      OrderStatus      `json:"status"`
+	UpdatedAt   string           `json:"updated_at"`
+}
