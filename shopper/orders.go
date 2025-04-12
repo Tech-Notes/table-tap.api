@@ -5,13 +5,14 @@ import (
 	"net/http"
 
 	internal "github.com/table-tap/api/internal/types"
+	utils "github.com/table-tap/api/internal/utils"
 )
 
 func GetOrdersByTableIDHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	businessID := businessIDFromContext(ctx)
+	businessID := utils.BusinessIDFromContext(ctx)
 
-	tableID := tableIDFromContext(ctx)
+	tableID := utils.TableIDFromContext(ctx)
 
 	orders, err := DBConn.GetOrdersByTableID(ctx, businessID, tableID)
 	if err != nil && err != sql.ErrNoRows {
@@ -29,9 +30,9 @@ func GetOrdersByTableIDHandler(w http.ResponseWriter, r *http.Request) {
 
 func CreateOrderHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	businessID := businessIDFromContext(ctx)
+	businessID := utils.BusinessIDFromContext(ctx)
 
-	tableID := tableIDFromContext(ctx)
+	tableID := utils.TableIDFromContext(ctx)
 
 	id, err := DBConn.CreateOrder(ctx, businessID, tableID)
 	if err != nil {

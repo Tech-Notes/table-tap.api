@@ -4,6 +4,8 @@ import (
 	"context"
 	"net/http"
 	"slices"
+
+	internal "github.com/table-tap/api/internal/utils"
 )
 
 type PermissionName string
@@ -14,7 +16,7 @@ const (
 )
 
 func checkPermissionAccess(ctx context.Context, permission PermissionName) bool {
-	businessUserPermissions := BusinessUserPermissionsFromContext(ctx)
+	businessUserPermissions := internal.BusinessUserPermissionsFromContext(ctx)
 	return slices.Contains(businessUserPermissions, string(permission))
 }
 

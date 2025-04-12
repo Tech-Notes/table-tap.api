@@ -33,19 +33,3 @@ func verify(h http.Handler) http.Handler {
 		h.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
-
-func businessIDFromContext(ctx context.Context) int64 {
-	businessID := ctx.Value(internal.ContextKeyBusinessID)
-	if businessID, ok := businessID.(int64); ok {
-		return businessID
-	}
-	return 0
-}
-
-func tableIDFromContext(ctx context.Context) int64 {
-	tableID := ctx.Value(internal.ContextKeyTableID)
-	if tableID, ok := tableID.(int64); ok {
-		return tableID
-	}
-	return 0
-}

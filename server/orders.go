@@ -7,11 +7,12 @@ import (
 
 	"github.com/go-chi/chi"
 	internal "github.com/table-tap/api/internal/types"
+	utils "github.com/table-tap/api/internal/utils"
 )
 
 func GetOrdersByTableIDHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	businessID := BusinessIDFromContext(ctx)
+	businessID := utils.BusinessIDFromContext(ctx)
 
 	tableIDSring := chi.URLParam(r, "table_id")
 	tableID, err := strconv.ParseInt(tableIDSring, 10, 64)
@@ -37,7 +38,7 @@ func GetOrdersByTableIDHandler(w http.ResponseWriter, r *http.Request) {
 
 func GetBusinessOrdersHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	businessID := BusinessIDFromContext(ctx)
+	businessID := utils.BusinessIDFromContext(ctx)
 
 	orders, err := DBConn.GetBusinessOrders(ctx, businessID)
 	if err != nil && err != sql.ErrNoRows {
@@ -63,7 +64,7 @@ type GetOrderDetailByIDSuccessResponse struct {
 
 func GetOrderDetailByIDHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	businessID := BusinessIDFromContext(ctx)
+	businessID := utils.BusinessIDFromContext(ctx)
 
 	orderIDSring := chi.URLParam(r, "order_id")
 	orderID, err := strconv.ParseInt(orderIDSring, 10, 64)
@@ -93,7 +94,7 @@ type ChangeOrderStatusRequest struct {
 
 func ChangeOrderStatusHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	businessID := BusinessIDFromContext(ctx)
+	businessID := utils.BusinessIDFromContext(ctx)
 
 	orderIDSring := chi.URLParam(r, "order_id")
 	orderID, err := strconv.ParseInt(orderIDSring, 10, 64)

@@ -5,11 +5,12 @@ import (
 	"net/http"
 
 	internal "github.com/table-tap/api/internal/types"
+	utils "github.com/table-tap/api/internal/utils"
 )
 
 func GetMenuItemsHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	businessID := BusinessIDFromContext(ctx)
+	businessID := utils.BusinessIDFromContext(ctx)
 
 	// Get menu items from the database
 	menuItems, err := DBConn.GetMenuItems(r.Context(), businessID)
@@ -27,7 +28,7 @@ func GetMenuItemsHandler(w http.ResponseWriter, r *http.Request) {
 
 func CreateMenuItemHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	businessID := BusinessIDFromContext(ctx)
+	businessID := utils.BusinessIDFromContext(ctx)
 
 	item := &internal.MenuItem{}
 	err := readJSON(r, item)

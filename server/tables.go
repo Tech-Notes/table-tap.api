@@ -13,7 +13,7 @@ func CreateTableHandler(w http.ResponseWriter, r *http.Request) {
 
 	ctx := r.Context()
 
-	businessID := BusinessIDFromContext(ctx)
+	businessID := utils.BusinessIDFromContext(ctx)
 	secureToken := uuid.New().String()
 
 	qrURL := "https://ordertap.com/order/" + secureToken
@@ -69,7 +69,7 @@ func GetTablesHandler(w http.ResponseWriter, r *http.Request) {
 
 	ctx := r.Context()
 
-	businessID := BusinessIDFromContext(ctx)
+	businessID := utils.BusinessIDFromContext(ctx)
 
 	tables, err := DBConn.GetTableList(ctx, businessID)
 	if err != nil {
