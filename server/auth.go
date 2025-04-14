@@ -15,9 +15,13 @@ type SignInRequest struct {
 	Password string `json:"password"`
 }
 
+type SignInResponseData struct {
+	Token string `json:"token"`
+}
+
 type SignInSuccessResponse struct {
 	*types.ResponseBase
-	Token string `json:"token"`
+	Data *SignInResponseData `json:"data"`
 }
 
 func SignInHandler(w http.ResponseWriter, r *http.Request) {
@@ -54,7 +58,9 @@ func SignInHandler(w http.ResponseWriter, r *http.Request) {
 
 	writeJSON(w, http.StatusOK, SignInSuccessResponse{
 		ResponseBase: &types.SuccessResponse,
-		Token:        token,
+		Data: &SignInResponseData{
+			Token: token,
+		},
 	})
 }
 

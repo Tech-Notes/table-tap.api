@@ -21,13 +21,10 @@ func getApiRouter() *chi.Mux {
 
 	api.Post("/v1/signin", SignInHandler)
 
+	api.Get("/healthCheck", authorizeHandler(DashboardView, HealthCheckHandler))
+
 	v1 := chi.NewRouter()
-
 	v1.Use(verify)
-
-	v1.Route("/healthCheck", func(r chi.Router) {
-		r.Get("/", authorizeHandler(DashboardView, HealthCheckHandler))
-	})
 
 	v1.Route("/menu_items", func(menuItems chi.Router) {
 		menuItems.Get("/", authorizeHandler(DashboardView, GetMenuItemsHandler))
