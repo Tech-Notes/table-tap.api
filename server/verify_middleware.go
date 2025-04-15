@@ -42,7 +42,8 @@ func generateHMACSignature(data, secret string) string {
 func verifyWithHMACSignature(h http.Handler) http.Handler {
 	secretApiKey := os.Getenv("SECRET_API_KEY")
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		hmacSignature := generateHMACSignature(r.URL.Path, secretApiKey)
+		data := "URL:" + r.URL.String()
+		hmacSignature := generateHMACSignature(data, secretApiKey)
 
 		if !hmac.Equal([]byte(hmacSignature), []byte(r.Header.Get("X-HMAC-SIGNATURE"))) {
 			writeError(w, http.StatusUnauthorized, errors.New("invalid HMAC signature"))
