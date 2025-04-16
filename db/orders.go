@@ -62,14 +62,13 @@ func (db *DB) GetOrderDetailByID(ctx context.Context, businessID, orderID int64)
 		SELECT oi.id,
 		oi.item_id,
 		oi.order_id,
-		oi.qty,
+		oi.quantity,
 		oi.price
-		FROM order_items oi
+		FROM orders_items oi
 		WHERE oi.order_id = $1
-		AND oi.business_id = $2
 	`
 	orderItems := []*types.OrderItem{}
-	err = db.SelectContext(ctx, &orderItems, orderItemsQuery, orderID, businessID)
+	err = db.SelectContext(ctx, &orderItems, orderItemsQuery, orderID)
 	if err != nil && err != sql.ErrNoRows {
 		return nil, err
 	}
@@ -102,15 +101,15 @@ func (db *DB) CreateOrder(ctx context.Context, businessID, tableID int64) (int64
 
 	args := map[string]interface{}{
 		"business_id": businessID,
-		"table_id":   tableID,
-		"status":     types.OrderStatusPending,
+		"table_id":    tableID,
+		"status":      types.OrderStatusPending,
 	}
 
 	orderID, err := db.InsertxContext(ctx, query, args)
 	if err != nil {
 		return 0, err
 	}
-	
+
 	return orderID, nil
 }
 

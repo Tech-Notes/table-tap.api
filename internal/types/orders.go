@@ -13,7 +13,7 @@ type OrderItem struct {
 	ID        int64   `json:"id" db:"id"`
 	ItemID    int64   `json:"item_id" db:"item_id"`
 	OrderID   int64   `json:"order_id" db:"order_id"`
-	Qty       int64   `json:"qty" db:"qty"`
+	Quantity  int64   `json:"quantity" db:"quantity"`
 	Price     float64 `json:"price" db:"price"`
 	CreatedAt string  `json:"created_at" db:"created_at"`
 }
@@ -26,7 +26,7 @@ type OrderDetail struct {
 type OrderStatus string
 
 const (
-	OrderStatusPending   OrderStatus = "pendin"
+	OrderStatusPending   OrderStatus = "pending"
 	OrderStatusPreparing OrderStatus = "preparing"
 	OrderStatusReady     OrderStatus = "ready"
 	OrderStatusPaid      OrderStatus = "paid"
