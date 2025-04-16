@@ -1,8 +1,11 @@
 package main
 
 import (
+	"database/sql"
 	"net/http"
+	"strconv"
 
+	"github.com/go-chi/chi"
 	"github.com/google/uuid"
 	"github.com/skip2/go-qrcode"
 	types "github.com/table-tap/api/internal/types"
@@ -81,6 +84,33 @@ func GetTablesHandler(w http.ResponseWriter, r *http.Request) {
 		ResponseBase: types.SuccessResponse,
 		Data: &GetTablesResponse{
 			Tables: tables,
+		},
+	})
+}
+
+func GetTableByIDHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	businessID := utils.BusinessIDFromContext(ctx)
+
+	tableIDSring := chi.URLParam(r, "id")
+	tableID, err := strconv.ParseInt(tableIDSring, 10, 64)
+
+	if err != nil {
+		writeError(w, http.StatusBadRequest, ErrRequiredTableID)
+		return
+	}
+
+	table, err := DBConn.GetTableByID(ctx, businessID, tableID)
+	if err != nil && err != sql.ErrNoRows {
+		writeError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	writeJSON(w, http.StatusOK, types.TableDetailSuccessResponse{
+		ResponseBase: types.SuccessResponse,
+		Data: &types.TableDetailResponse{
+			Table: table,
 		},
 	})
 }

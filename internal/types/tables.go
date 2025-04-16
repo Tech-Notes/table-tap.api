@@ -17,3 +17,11 @@ type Table struct {
 	Status     TableStatus `json:"status" db:"status"`
 	QrCodeURL  string      `json:"qr_code_url" db:"qr_code_url"`
 }
+
+type TableDetailResponse struct {
+	Table *Table `json:"table"`
+}
+type TableDetailSuccessResponse struct {
+	ResponseBase
+	Data *TableDetailResponse `json:"data"`
+}

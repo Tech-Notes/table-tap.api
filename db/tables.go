@@ -7,7 +7,7 @@ import (
 )
 
 func (db *DB) CreateTable(ctx context.Context, table *types.Table) (int64, error) {
-	
+
 	query := `
 		INSERT INTO tables (business_id, qr_code_url, status, token)
 		VALUES (:business_id, :qr_code_url, :status, :token)
@@ -22,7 +22,7 @@ func (db *DB) CreateTable(ctx context.Context, table *types.Table) (int64, error
 }
 
 func (db *DB) GetTableList(ctx context.Context, businessID int64) ([]*types.Table, error) {
-	
+
 	query := `
 		SELECT id, business_id, qr_code_url, status, token
 		FROM tables
@@ -48,6 +48,25 @@ func (db *DB) GetTableByToken(ctx context.Context, token string) (*types.Table, 
 	`
 	table := &types.Table{}
 	err := db.GetContext(ctx, table, query, token)
+	if err != nil {
+		return nil, err
+	}
+
+	return table, nil
+}
+
+func (db *DB) GetTableByID(ctx context.Context, businesID, id int64) (*types.Table, error) {
+	query := `
+	SELECT id,
+	business_id,
+	status,
+	qr_code_url,
+	token
+	FROM tables
+	WHERE id = $1 AND business_id = $2
+	`
+	table := &types.Table{}
+	err := db.GetContext(ctx, table, query, id, businesID)
 	if err != nil {
 		return nil, err
 	}
