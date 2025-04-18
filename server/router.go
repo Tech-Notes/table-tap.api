@@ -37,7 +37,7 @@ func getApiRouter() *chi.Mux {
 		orders.Get("/{table_id}", authorizeHandler(DashboardView, GetOrdersByTableIDHandler))
 		orders.Get("/", authorizeHandler(DashboardView, GetBusinessOrdersHandler))
 		orders.Get("/{order_id}", authorizeHandler(DashboardView, GetOrderDetailByIDHandler))
-		orders.Patch("/{order_id}", authorizeHandler(DashboardView, ChangeOrderStatusHandler))
+		orders.Patch("/{order_id}/status", authorizeHandler(DashboardView, ChangeOrderStatusHandler))
 	})
 
 	v1.Route("/tables", func(tables chi.Router) {

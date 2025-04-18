@@ -16,6 +16,7 @@ func (db *DB) GetBusinessOrders(ctx context.Context, businessID int64) ([]*types
 		o.status
 		FROM orders o
 		WHERE o.business_id = $1
+		ORDER BY id DESC;
 	`
 	orders := []*types.Order{}
 	err := db.SelectContext(ctx, &orders, query, businessID)
@@ -35,6 +36,7 @@ func (db *DB) GetOrdersByTableID(ctx context.Context, businessID, tableID int64)
 		FROM orders o
 		WHERE o.table_id = $1
 		AND o.business_id = $2
+		ORDER BY id DESC;
 	`
 	orders := []*types.Order{}
 	err := db.SelectContext(ctx, &orders, query, tableID, businessID)

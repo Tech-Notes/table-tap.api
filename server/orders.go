@@ -112,7 +112,7 @@ func ChangeOrderStatusHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if data.Status == "" || !data.Status.IsValid() {
+	if data.Status == "" || !data.Status.IsValid() || data.Status == types.OrderStatusPaid {
 		writeError(w, http.StatusBadRequest, ErrInvalidOrderStatus)
 		return
 	}
