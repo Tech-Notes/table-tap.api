@@ -17,6 +17,14 @@ func CreateTableHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	businessID := utils.BusinessIDFromContext(ctx)
+
+	data := &types.CreateTableRequest{}
+	err := readJSON(r, data)
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, ErrFailedRequestBody)
+		return
+	}
+
 	secureToken := uuid.New().String()
 
 	qrURL := "https://ordertap.com/order/" + secureToken
@@ -38,10 +46,12 @@ func CreateTableHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Store in database (replace this with your actual DB logic)
 	table := &types.Table{
-		BusinessID: businessID,
-		QrCodeURL:  imageURL,
-		Status:     "active",
-		Token:      secureToken,
+		BusinessID:  businessID,
+		QrCodeURL:   imageURL,
+		Status:      types.TableStatusAvailable,
+		Token:       secureToken,
+		TableNo:     data.TableNo,
+		Description: data.Description,
 	}
 
 	id, err := DBConn.CreateTable(ctx, table)
