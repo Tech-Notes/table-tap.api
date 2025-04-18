@@ -117,10 +117,17 @@ func GetTableByIDHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	orders, err := DBConn.GetOrdersByTableID(ctx, businessID, tableID)
+	if err != nil && err != sql.ErrNoRows {
+		writeError(w, http.StatusInternalServerError, err)
+		return
+	}
+
 	writeJSON(w, http.StatusOK, types.TableDetailSuccessResponse{
 		ResponseBase: types.SuccessResponse,
 		Data: &types.TableDetailResponse{
-			Table: table,
+			Table:  table,
+			Orders: orders,
 		},
 	})
 }

@@ -36,6 +36,7 @@ func (db *DB) GetOrdersByTableID(ctx context.Context, businessID, tableID int64)
 		FROM orders o
 		WHERE o.table_id = $1
 		AND o.business_id = $2
+		AND o.status != 'paid'
 		ORDER BY id DESC;
 	`
 	orders := []*types.Order{}

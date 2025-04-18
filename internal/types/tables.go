@@ -23,7 +23,8 @@ type Table struct {
 }
 
 type TableDetailResponse struct {
-	Table *Table `json:"table"`
+	Table  *Table   `json:"table"`
+	Orders []*Order `json:"orders"`
 }
 type TableDetailSuccessResponse struct {
 	ResponseBase
