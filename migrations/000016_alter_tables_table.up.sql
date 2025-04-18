@@ -1,0 +1,2 @@
+ALTER TABLE tables
+ADD COLUMN table_no INT NULL;
