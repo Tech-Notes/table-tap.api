@@ -11,6 +11,15 @@ type DB struct {
 	EncryptKey *[32]byte
 }
 
+type Tx struct {
+	*sqlx.Tx
+}
+
+func (db *DB) MustBeginContext(ctx context.Context) *Tx {
+	tx := db.DB.MustBeginTx(ctx, nil)
+	return &Tx{Tx: tx}
+}
+
 func (db *DB) InsertxContext(ctx context.Context, query string, arg interface{}) (int64, error) {
 	namedStmt, err := db.PrepareNamedContext(ctx, query)
 	if err != nil {
