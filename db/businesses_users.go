@@ -11,9 +11,11 @@ func (db *DB) GetLastActiveBusinessUserByEmail(ctx context.Context, email string
 	query := `
 	WITH permissions AS (
 		SELECT 
-		p.id AS permission_id,
+		rp.role_id,
 		COALESCE(ARRAY_AGG(p.name), '{}') AS permissions
-		FROM permissions p
+		FROM role_permissions rp
+		INNER JOIN permissions p
+		ON rp.permission_id = p.id
 		GROUP BY 1
 	)
 	SELECT bu.id,
@@ -28,10 +30,8 @@ func (db *DB) GetLastActiveBusinessUserByEmail(ctx context.Context, email string
 	FROM businesses_users bu
 	INNER JOIN users u 
 	ON bu.user_id = u.id
-	INNER JOIN role_permissions rp
-	ON bu.role_id = rp.role_id
-	LEFT JOIN permissions p
-	ON rp.permission_id = p.permission_id
+	INNER JOIN permissions p
+	ON bu.role_id = p.role_id
 	WHERE email = $1
 	ORDER BY updated_at DESC
 	LIMIT 1
