@@ -1,0 +1,2 @@
+ALTER TABLE orders
+ADD COLUMN table_no INT NULL;
