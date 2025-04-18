@@ -1,5 +1,7 @@
 package types
 
+import "gopkg.in/guregu/null.v4"
+
 type TableStatus string
 
 const (
@@ -11,12 +13,13 @@ const (
 )
 
 type Table struct {
-	ID         int64       `json:"id" db:"id"`
-	BusinessID int64       `json:"business_id" db:"business_id"`
-	Token      string      `json:"token" db:"token"`
-	Status     TableStatus `json:"status" db:"status"`
-	QrCodeURL  string      `json:"qr_code_url" db:"qr_code_url"`
-	TableNo    int64       `json:"table_no" db:"table_no"`
+	ID          int64       `json:"id" db:"id"`
+	BusinessID  int64       `json:"business_id" db:"business_id"`
+	Token       string      `json:"token" db:"token"`
+	Status      TableStatus `json:"status" db:"status"`
+	QrCodeURL   string      `json:"qr_code_url" db:"qr_code_url"`
+	TableNo     int64       `json:"table_no" db:"table_no"`
+	Description null.String `json:"description" db:"description"`
 }
 
 type TableDetailResponse struct {
@@ -25,4 +28,9 @@ type TableDetailResponse struct {
 type TableDetailSuccessResponse struct {
 	ResponseBase
 	Data *TableDetailResponse `json:"data"`
+}
+
+type CreateTableRequest struct {
+	TableNo     int64       `json:"table_no"`
+	Description null.String `json:"description"`
 }

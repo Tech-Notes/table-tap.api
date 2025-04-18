@@ -9,8 +9,8 @@ import (
 func (db *DB) CreateTable(ctx context.Context, table *types.Table) (int64, error) {
 
 	query := `
-		INSERT INTO tables (business_id, qr_code_url, status, token, table_no)
-		VALUES (:business_id, :qr_code_url, :status, :token, :table_no)
+		INSERT INTO tables (business_id, qr_code_url, status, token, table_no, description)
+		VALUES (:business_id, :qr_code_url, :status, :token, :table_no, :description)
 		RETURNING id`
 
 	id, err := db.InsertxContext(ctx, query, table)
@@ -24,7 +24,7 @@ func (db *DB) CreateTable(ctx context.Context, table *types.Table) (int64, error
 func (db *DB) GetTableList(ctx context.Context, businessID int64) ([]*types.Table, error) {
 
 	query := `
-		SELECT id, business_id, qr_code_url, status, token, COALESCE(table_no, 0) AS table_no
+		SELECT id, business_id, qr_code_url, status, token, COALESCE(table_no, 0) AS table_no, description
 		FROM tables
 		WHERE business_id = $1`
 
@@ -43,7 +43,9 @@ func (db *DB) GetTableByToken(ctx context.Context, token string) (*types.Table, 
 	business_id,
 	status,
 	qr_code_url,
-	COALESCE(table_no, 0) AS table_no FROM tables
+	COALESCE(table_no, 0) AS table_no,
+	description
+	FROM tables
 	WHERE token = $1
 	`
 	table := &types.Table{}
@@ -62,7 +64,8 @@ func (db *DB) GetTableByID(ctx context.Context, businesID, id int64) (*types.Tab
 	status,
 	qr_code_url,
 	token,
-	COALESCE(table_no, 0) AS table_no
+	COALESCE(table_no, 0) AS table_no,
+	description
 	FROM tables
 	WHERE id = $1 AND business_id = $2
 	`
