@@ -12,6 +12,7 @@ func (db *DB) GetBusinessOrders(ctx context.Context, businessID int64) ([]*types
 		SELECT o.id,
 		o.business_id, 
 		o.table_id, 
+		COALESCE(o.table_no, 0) AS table_no,
 		o.status
 		FROM orders o
 		WHERE o.business_id = $1
@@ -28,7 +29,8 @@ func (db *DB) GetOrdersByTableID(ctx context.Context, businessID, tableID int64)
 	query := `
 		SELECT o.id,
 		o.business_id, 
-		o.table_id, 
+		o.table_id,
+		COALESCE(o.table_no, 0) AS table_no, 
 		o.status
 		FROM orders o
 		WHERE o.table_id = $1
@@ -47,6 +49,7 @@ func (db *DB) GetOrderDetailByID(ctx context.Context, businessID, orderID int64)
 		SELECT o.id,
 		o.business_id, 
 		o.table_id, 
+		COALESCE(o.table_no, 0) AS table_no,
 		o.status
 		FROM orders o
 		WHERE o.business_id = $1
@@ -118,6 +121,7 @@ func (db *DB) GetOrderByID(ctx context.Context, businessID, orderID int64) (*typ
 		SELECT o.id,
 		o.business_id, 
 		o.table_id, 
+		COALESCE(o.table_no, 0) AS table_no,
 		o.status
 		FROM orders o
 		WHERE o.business_id = $1

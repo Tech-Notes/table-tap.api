@@ -16,6 +16,7 @@ type Table struct {
 	Token      string      `json:"token" db:"token"`
 	Status     TableStatus `json:"status" db:"status"`
 	QrCodeURL  string      `json:"qr_code_url" db:"qr_code_url"`
+	TableNo    int64       `json:"table_no" db:"table_no"`
 }
 
 type TableDetailResponse struct {
