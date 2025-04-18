@@ -131,3 +131,30 @@ func GetTableByIDHandler(w http.ResponseWriter, r *http.Request) {
 		},
 	})
 }
+
+func MarkTableOrdersAsPaidHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	businessID := utils.BusinessIDFromContext(ctx)
+
+	tableIDSring := chi.URLParam(r, "id")
+	tableID, err := strconv.ParseInt(tableIDSring, 10, 64)
+
+	if err != nil {
+		writeError(w, http.StatusBadRequest, ErrRequiredTableID)
+		return
+	}
+
+	id, err := DBConn.MarkTableOrdersAsPaid(ctx, businessID, tableID)
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	writeJSON(w, http.StatusCreated, types.ActionSuccessResponse{
+		ResponseBase: types.SuccessResponse,
+		Data: &types.ActionSuccessResponseData{
+			ID: id,
+		},
+	})
+
+}

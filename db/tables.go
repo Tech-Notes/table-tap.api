@@ -77,3 +77,44 @@ func (db *DB) GetTableByID(ctx context.Context, businesID, id int64) (*types.Tab
 
 	return table, nil
 }
+
+func (db *DB) MarkTableOrdersAsPaid(ctx context.Context, businessID, tableID int64) (int64, error) {
+	tx := db.MustBeginContext(ctx)
+	query := `
+	UPDATE tables
+	SET status = :status
+	WHERE id = :id AND business_id = :business_id;
+	`
+	args := map[string]any{
+		"status":      types.TableStatusAvailable,
+		"id":          tableID,
+		"business_id": businessID,
+	}
+
+	_, err := tx.NamedExecContext(ctx, query, args)
+	if err != nil {
+		tx.Rollback()
+		return 0, err
+	}
+
+	updateOrdersStatus := `
+	UPDATE orders
+	SET status = :status
+	WHERE table_id = :table_id
+	AND status != 'paid' AND business_id = :business_id
+	`
+	orderArgs := map[string]any{
+		"status":      types.OrderStatusPaid,
+		"table_id":    tableID,
+		"business_id": businessID,
+	}
+	_, err = tx.NamedExecContext(ctx, updateOrdersStatus, orderArgs)
+	if err != nil {
+		tx.Rollback()
+		return 0, err
+	}
+
+	err = tx.Commit()
+
+	return tableID, err
+}

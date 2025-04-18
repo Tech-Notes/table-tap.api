@@ -44,6 +44,7 @@ func getApiRouter() *chi.Mux {
 		tables.Post("/", authorizeHandler(CreateTable, CreateTableHandler))
 		tables.Get("/", authorizeHandler(DashboardView, GetTablesHandler))
 		tables.Get("/{id}", authorizeHandler(DashboardView, GetTableByIDHandler))
+		tables.Post("/{id}/paid", authorizeHandler(DashboardView, MarkTableOrdersAsPaidHandler))
 	})
 
 	//notifications
