@@ -6,6 +6,7 @@ type Order struct {
 	TableID    int64       `json:"table_id" db:"table_id"`
 	TableNo    int64       `json:"table_no" db:"table_no"`
 	Status     OrderStatus `json:"status" db:"status"`
+	Total      float64     `json:"total" db:"total"`
 	CreatedAt  string      `json:"created_at" db:"created_at"`
 	UpdatedAt  string      `json:"updated_at" db:"updated_at"`
 }

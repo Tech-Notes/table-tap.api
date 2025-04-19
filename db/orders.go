@@ -13,7 +13,8 @@ func (db *DB) GetBusinessOrders(ctx context.Context, businessID int64) ([]*types
 		o.business_id, 
 		o.table_id, 
 		COALESCE(o.table_no, 0) AS table_no,
-		o.status
+		o.status,
+		COALESCE(o.total, 0) AS total
 		FROM orders o
 		WHERE o.business_id = $1
 		ORDER BY id DESC;
@@ -32,7 +33,8 @@ func (db *DB) GetOrdersByTableID(ctx context.Context, businessID, tableID int64)
 		o.business_id, 
 		o.table_id,
 		COALESCE(o.table_no, 0) AS table_no, 
-		o.status
+		o.status,
+		COALESCE(o.total, 0) AS total
 		FROM orders o
 		WHERE o.table_id = $1
 		AND o.business_id = $2
@@ -53,7 +55,8 @@ func (db *DB) GetOrderDetailByID(ctx context.Context, businessID, orderID int64)
 		o.business_id, 
 		o.table_id, 
 		COALESCE(o.table_no, 0) AS table_no,
-		o.status
+		o.status,
+		COALESCE(o.total, 0) AS total
 		FROM orders o
 		WHERE o.business_id = $1
 		AND o.id = $2
@@ -125,7 +128,8 @@ func (db *DB) GetOrderByID(ctx context.Context, businessID, orderID int64) (*typ
 		o.business_id, 
 		o.table_id, 
 		COALESCE(o.table_no, 0) AS table_no,
-		o.status
+		o.status,
+		COALESCE(o.total, 0) AS total
 		FROM orders o
 		WHERE o.business_id = $1
 		AND o.id = $2
