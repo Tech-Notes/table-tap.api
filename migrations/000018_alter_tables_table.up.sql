@@ -1,2 +1,2 @@
 ALTER TABLE tables
-ADD COLUMN description TEXT NULL;
+ADD COLUMN IF NOT EXISTS description TEXT NULL;
