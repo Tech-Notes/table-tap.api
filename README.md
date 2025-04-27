@@ -1,5 +1,7 @@
 # TableTap API
 
+TableTap is a self-ordering service designed for modern restaurants. By scanning a QR code, customers can view the menu, place orders directly from their phones, and have them sent to the kitchen and counter in real time. No downloads, no wait time — just seamless ordering and dining.
+
 ## Running Locally
 
 Clone the project
@@ -35,6 +37,7 @@ cd server && cp .env.sample .env
 Other steps
    - set up postgresql database
    - create a bucket on amazon s3
+   - redis server for pub/sub
    - and update .env keys
 
 Start the server
