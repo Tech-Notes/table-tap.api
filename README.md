@@ -1,6 +1,9 @@
 # TableTap API
 
-TableTap is a self-ordering service designed for modern restaurants. By scanning a QR code, customers can view the menu, place orders directly from their phones, and have them sent to the kitchen and counter in real time. No downloads, no wait time — just seamless ordering and dining.
+TableTap is a self-ordering service designed for modern restaurants. By scanning a QR code, customers can view the menu, place orders directly from their phones, and have those orders sent to the kitchen and counter in real time.
+<br>
+<br>
+**No downloads, no wait time — just seamless ordering and dining.**
 
 ## Running Locally
 
