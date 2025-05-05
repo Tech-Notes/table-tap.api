@@ -8,4 +8,5 @@ import (
 var (
 	DBConn *db.DB
 	NotificationServer *notifications.Server
+	NotificationHub *notifications.Hub
 )

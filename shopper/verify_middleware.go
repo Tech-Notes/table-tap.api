@@ -2,6 +2,7 @@ package shopper
 
 import (
 	"context"
+	"errors"
 	"net/http"
 
 	"github.com/table-tap/api/internal/types"
@@ -16,20 +17,31 @@ func verify(h http.Handler) http.Handler {
 			return
 		}
 
-		table, err := DBConn.GetTableByToken(ctx, tableToken)
+		ctx, err := getContext(ctx, tableToken)
 		if err != nil {
-			writeError(w, http.StatusBadRequest, ErrInvalidTableToken)
+			if errors.Is(err, ErrInvalidTableToken) {
+				writeError(w, http.StatusBadRequest, ErrInvalidTableToken)
+			}
+			writeError(w, http.StatusUnauthorized, err)
 			return
 		}
 
-		if table != nil && table.ID == 0 {
-			writeError(w, http.StatusBadRequest, ErrInvalidTableToken)
-			return
-		}
-
-		ctx = context.WithValue(ctx, types.ContextKeyBusinessID, table.BusinessID)
-		ctx = context.WithValue(ctx, types.ContextKeyTableID, table.ID)
-		
 		h.ServeHTTP(w, r.WithContext(ctx))
 	})
+}
+
+func getContext(ctx context.Context, tableToken string) (context.Context, error) {
+
+	table, err := DBConn.GetTableByToken(ctx, tableToken)
+	if err != nil {
+		return nil, ErrInvalidTableToken
+	}
+
+	if table != nil && table.ID == 0 {
+		return nil, ErrInvalidTableToken
+	}
+	ctx = context.WithValue(ctx, types.ContextKeyBusinessID, table.BusinessID)
+	ctx = context.WithValue(ctx, types.ContextKeyTableID, table.ID)
+
+	return ctx, nil
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/go-chi/chi"
+	"github.com/table-tap/api/notifications"
 	"github.com/table-tap/api/shopper"
 )
 
@@ -49,7 +50,7 @@ func getApiRouter() *chi.Mux {
 
 	//notifications
 	v1.Route("/notifications", func(noti chi.Router) {
-		noti.Get("/", authorizeHandler(DashboardView, NewOrderNotificationHandler))
+		noti.Get("/", notifications.WebSocketHandler(NotificationHub))
 	})
 
 	api.Mount("/v1", v1)

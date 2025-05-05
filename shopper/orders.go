@@ -3,7 +3,6 @@ package shopper
 import (
 	"database/sql"
 	"net/http"
-	"time"
 
 	"github.com/table-tap/api/internal/types"
 	utils "github.com/table-tap/api/internal/utils"
@@ -41,14 +40,8 @@ func CreateOrderHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Publish new order notification
-	NotificationServer.PublishOrderNotification(businessID, &types.NewOrderNotiPayload{
-		TableNumber: tableID,
-		OrderID:     id,
-		Type:        types.NotificationTypeNewOrder,
-		Status:      types.OrderStatusPending,
-		CreatedAt:   time.Now().Format(time.RFC3339),
-	})
+	// Publish new order notification to admin
+	NotificationHub.Publish("admin", []byte("New order is created"))
 
 	writeJSON(w, http.StatusCreated, types.ActionSuccessResponse{
 		ResponseBase: types.SuccessResponse,
