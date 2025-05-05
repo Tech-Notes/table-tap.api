@@ -17,8 +17,7 @@ import (
 )
 
 var (
-	DBConn *db.DB
-	NotificationServer *notifications.Server
+	DBConn          *db.DB
 	NotificationHub *notifications.Hub
 )
 
