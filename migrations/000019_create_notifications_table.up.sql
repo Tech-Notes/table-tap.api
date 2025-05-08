@@ -1,0 +1,10 @@
+CREATE TABLE IF NOT EXISTS notifications (
+    id SERIAL PRIMARY KEY,
+    message TEXT NOT NULL,
+    type TEXT NOT NULL,
+    is_read BOOLEAN NOT NULL DEFAULT FALSE,
+    meta_data JSONB NOT NULL,
+    business_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
