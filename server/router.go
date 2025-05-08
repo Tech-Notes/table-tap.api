@@ -50,7 +50,8 @@ func getApiRouter() *chi.Mux {
 
 	//notifications
 	v1.Route("/notifications", func(noti chi.Router) {
-		noti.Get("/", notifications.WebSocketHandler(NotificationHub))
+		noti.Get("/ws", notifications.WebSocketHandler(NotificationHub))
+		noti.Get("/", authorizeHandler(DashboardView, GetNotificationListHandler))
 	})
 
 	api.Mount("/v1", v1)
