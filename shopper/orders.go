@@ -8,6 +8,7 @@ import (
 
 	"github.com/table-tap/api/internal/types"
 	utils "github.com/table-tap/api/internal/utils"
+	"gopkg.in/guregu/null.v4"
 )
 
 func GetOrdersByTableIDHandler(w http.ResponseWriter, r *http.Request) {
@@ -42,15 +43,34 @@ func CreateOrderHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Create the notification payload
-	notification := map[string]string{
-		"code":    "new_order",
-		"message": "A new order has been created",
-		"orderID": fmt.Sprintf("%d", id),
+	// Save notification to database
+	notification := &types.Notification{
+		Type:    types.NotificationTypeNewOrder,
+		Message: fmt.Sprintf("A new order has been created from table - #%d", tableID),
+		IsRead:  false,
+		MetaData: types.NotificationMetaData{
+			TableID: tableID,
+			OrderID: null.IntFrom(id),
+		},
+		BusinessID: businessID,
+	}
+
+	_, err = DBConn.CreateNotification(ctx, notification)
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	// Create the message payload
+	message := map[string]string{
+		"code":     "new_order",
+		"message":  fmt.Sprintf("A new order has been created from table - #%d", tableID),
+		"order_id": fmt.Sprintf("%d", id),
+		"table_id": fmt.Sprintf("%d", tableID),
 	}
 
 	// Convert the notification to a JSON string
-	notificationJSON, err := json.Marshal(notification)
+	notificationJSON, err := json.Marshal(message)
 	if err != nil {
 		writeError(w, http.StatusInternalServerError, err)
 		return
