@@ -2,6 +2,8 @@ package shopper
 
 import (
 	"database/sql"
+	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/table-tap/api/internal/types"
@@ -40,8 +42,22 @@ func CreateOrderHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Create the notification payload
+	notification := map[string]string{
+		"code":    "new_order",
+		"message": "A new order has been created",
+		"orderID": fmt.Sprintf("%d", id),
+	}
+
+	// Convert the notification to a JSON string
+	notificationJSON, err := json.Marshal(notification)
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, err)
+		return
+	}
+
 	// Publish new order notification to admin
-	NotificationHub.Publish("admin", []byte("New order is created"))
+	NotificationHub.Publish("admin", notificationJSON)
 
 	writeJSON(w, http.StatusCreated, types.ActionSuccessResponse{
 		ResponseBase: types.SuccessResponse,
