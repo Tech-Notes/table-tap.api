@@ -44,3 +44,15 @@ func (db *DB) CreateNotification(ctx context.Context, notification *types.Notifi
 
 	return orderID, nil
 }
+
+func (db *DB) SetNotificationAsReadByID(ctx context.Context, id, businesID int64) error {
+	query := `
+	UPDATE notifications
+	SET is_read = TRUE
+	WHERE id = $1 AND business_id = $2;
+	`
+
+	_, err := db.ExecContext(ctx, query, id, businesID)
+
+	return err
+}
