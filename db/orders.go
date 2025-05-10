@@ -101,16 +101,17 @@ func (db *DB) ChangeOrderStatus(ctx context.Context, businessID, orderID int64, 
 	return nil
 }
 
-func (db *DB) CreateOrder(ctx context.Context, businessID, tableID int64) (int64, error) {
+func (db *DB) CreateOrder(ctx context.Context, businessID, tableID, tableNo int64) (int64, error) {
 	query := `
-	INSERT INTO orders (business_id, table_id, status)
-	VALUES (:business_id, :table_id, :status)
+	INSERT INTO orders (business_id, table_id, table_no, status)
+	VALUES (:business_id, :table_id, :table_no, :status)
 	RETURNING id
 	`
 
 	args := map[string]interface{}{
 		"business_id": businessID,
 		"table_id":    tableID,
+		"table_no":    tableNo,
 		"status":      types.OrderStatusPending,
 	}
 

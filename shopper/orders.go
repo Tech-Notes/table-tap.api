@@ -36,8 +36,9 @@ func CreateOrderHandler(w http.ResponseWriter, r *http.Request) {
 	businessID := utils.BusinessIDFromContext(ctx)
 
 	tableID := utils.TableIDFromContext(ctx)
+	tableNo := utils.TableNoFromContext(ctx)
 
-	id, err := DBConn.CreateOrder(ctx, businessID, tableID)
+	id, err := DBConn.CreateOrder(ctx, businessID, tableID, tableNo)
 	if err != nil {
 		writeError(w, http.StatusInternalServerError, err)
 		return

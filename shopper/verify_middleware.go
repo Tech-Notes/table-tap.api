@@ -42,6 +42,7 @@ func getContext(ctx context.Context, tableToken string) (context.Context, error)
 	}
 	ctx = context.WithValue(ctx, types.ContextKeyBusinessID, table.BusinessID)
 	ctx = context.WithValue(ctx, types.ContextKeyTableID, table.ID)
+	ctx = context.WithValue(ctx, types.ContextKeyTableNo, table.TableNo)
 
 	return ctx, nil
 }
