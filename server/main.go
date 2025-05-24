@@ -13,11 +13,12 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/table-tap/api/db"
 	"github.com/table-tap/api/notifications"
+	"github.com/table-tap/api/shopper"
 )
 
 var (
-	DBConn *db.DB
-	NotificationServer *notifications.Server
+	DBConn          *db.DB
+	NotificationHub *notifications.Hub
 )
 
 func main() {
@@ -32,16 +33,12 @@ func main() {
 	}
 
 	DBConn = openDB()
+	shopper.DBConn = DBConn
 
-	// notifications
-	redisURL := os.Getenv("REDIS_URL")
-	if redisURL == "" {
-		panic("NO REDIS URL IN env")
-	}
-	
-	NotificationServer = notifications.NewServer(&notifications.Options{
-		RedisAddr: redisURL,
-	})
+	//notifications
+	NotificationHub = notifications.NewHub()
+	shopper.NotificationHub = NotificationHub
+	go NotificationHub.Run()
 
 	port := os.Getenv("PORT")
 	log.Printf("port:%s\n", port)

@@ -1,6 +1,9 @@
 package shopper
 
-import "github.com/go-chi/chi"
+import (
+	"github.com/go-chi/chi"
+	"github.com/table-tap/api/notifications"
+)
 
 func GetRouter() *chi.Mux {
 	shopper := chi.NewRouter()
@@ -17,7 +20,7 @@ func GetRouter() *chi.Mux {
 
 	//notifications
 	shopper.Route("/notifications", func(noti chi.Router) {
-		noti.Get("/", NewOrderNotificationHandler)
+		noti.Get("/", notifications.WebSocketHandler(NotificationHub))
 	})
 
 	r := chi.NewRouter()

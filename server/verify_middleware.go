@@ -9,6 +9,7 @@ import (
 	"errors"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/table-tap/api/internal/types"
 )
@@ -43,6 +44,9 @@ func verifyWithHMACSignature(h http.Handler) http.Handler {
 	secretApiKey := os.Getenv("SECRET_API_KEY")
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		data := "URL:" + r.URL.String()
+		if strings.Contains(r.URL.Path, "notifications") {
+			data = "URL:" + r.URL.Path
+		}
 		hmacSignature := generateHMACSignature(data, secretApiKey)
 
 		if !hmac.Equal([]byte(hmacSignature), []byte(r.Header.Get("X-HMAC-SIGNATURE"))) {

@@ -13,7 +13,7 @@ func GetMenuItemsHandler(w http.ResponseWriter, r *http.Request) {
 	businessID := utils.BusinessIDFromContext(ctx)
 
 	// Get menu items from the database
-	menuItems, err := DBConn.GetMenuItems(r.Context(), businessID)
+	menuItems, err := DBConn.GetMenuItems(ctx, businessID)
 	if err != nil && err != sql.ErrNoRows {
 		writeError(w, http.StatusInternalServerError, err)
 	}

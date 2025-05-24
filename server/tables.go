@@ -150,7 +150,7 @@ func MarkTableOrdersAsPaidHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	writeJSON(w, http.StatusCreated, types.ActionSuccessResponse{
+	writeJSON(w, http.StatusOK, types.ActionSuccessResponse{
 		ResponseBase: types.SuccessResponse,
 		Data: &types.ActionSuccessResponseData{
 			ID: id,

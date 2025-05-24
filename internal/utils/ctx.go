@@ -30,3 +30,11 @@ func TableIDFromContext(ctx context.Context) int64 {
 	}
 	return 0
 }
+
+func TableNoFromContext(ctx context.Context) int64 {
+	tableNo := ctx.Value(types.ContextKeyTableNo)
+	if tableNo, ok := tableNo.(int64); ok {
+		return tableNo
+	}
+	return 0
+}
