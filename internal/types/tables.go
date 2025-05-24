@@ -1,6 +1,8 @@
 package types
 
-import "gopkg.in/guregu/null.v4"
+import (
+	"gopkg.in/guregu/null.v4"
+)
 
 type TableStatus string
 
@@ -20,6 +22,7 @@ type Table struct {
 	QrCodeURL   string      `json:"qr_code_url" db:"qr_code_url"`
 	TableNo     int64       `json:"table_no" db:"table_no"`
 	Description null.String `json:"description" db:"description"`
+	CreatedAt   ISO8601Time `json:"created_at" db:"created_at"`
 }
 
 type TableDetailResponse struct {

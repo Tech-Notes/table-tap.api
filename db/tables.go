@@ -24,7 +24,14 @@ func (db *DB) CreateTable(ctx context.Context, table *types.Table) (int64, error
 func (db *DB) GetTableList(ctx context.Context, businessID int64) ([]*types.Table, error) {
 
 	query := `
-		SELECT id, business_id, qr_code_url, status, token, COALESCE(table_no, 0) AS table_no, description
+		SELECT id, 
+		business_id, 
+		qr_code_url, 
+		status, 
+		token, 
+		COALESCE(table_no, 0) AS table_no, 
+		description,
+		created_at
 		FROM tables
 		WHERE business_id = $1`
 
