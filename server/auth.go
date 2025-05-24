@@ -34,7 +34,11 @@ func SignInHandler(w http.ResponseWriter, r *http.Request) {
 
 	ctx := r.Context()
 	businessUser, err := DBConn.GetLastActiveBusinessUserByEmail(ctx, payload.Email)
-	if err != nil && err != sql.ErrNoRows {
+	if err != nil {
+		if err == sql.ErrNoRows {
+			writeError(w, http.StatusUnauthorized, ErrUserNotFound)
+			return
+		}
 		writeError(w, http.StatusInternalServerError, err)
 		return
 	}
