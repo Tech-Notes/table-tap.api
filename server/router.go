@@ -22,7 +22,11 @@ func getApiRouter() *chi.Mux {
 
 	api.Post("/v1/signin", SignInHandler)
 
+	api.Get("/v1/notifications/ws", notifications.WebSocketHandler(NotificationHub))
+
 	v1 := chi.NewRouter()
+
+	
 	v1.Use(verify)
 
 	v1.Route("/healthCheck", func(healthCheck chi.Router) {
