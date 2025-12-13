@@ -24,6 +24,9 @@ func GetRouter() *chi.Mux {
 	})
 
 	r := chi.NewRouter()
+
+	r.Post("/api/v1/tables/validate", ValidateTableHandler)
+
 	r.Mount("/api/v1", shopper)
 
 	return r

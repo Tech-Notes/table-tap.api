@@ -6,4 +6,6 @@ import (
 
 var (
 	ErrInvalidTableToken *types.Error = &types.Error{Code: "invalid-table-token", Message: "Table token is not correct, please scan again."}
+	ErrFailedRequestBody  *types.Error = &types.Error{Code: "failed-request-body", Message: "Faild to read request body."}
+
 )
