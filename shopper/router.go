@@ -10,8 +10,8 @@ func GetRouter() *chi.Mux {
 
 	shopper.Use(verify)
 
-	shopper.Route("/menu_items", func(menuItems chi.Router) {
-		menuItems.Get("/", GetMenuItemsHandler)
+	shopper.Route("/shops", func(shops chi.Router) {
+		shops.Get("/{id}/menu_items", GetMenuItemsHandler)
 	})
 
 	shopper.Route("/orders", func(r chi.Router) {
