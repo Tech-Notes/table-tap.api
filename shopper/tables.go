@@ -7,9 +7,10 @@ type ValidateTableRequest struct {
 }
 
 type ValidateTableResponse struct {
-	Valid   bool  `json:"valid"`
-	ShopID  int64 `json:"shopId,omitempty"`
-	TableID int64 `json:"tableId,omitempty"`
+	Valid      bool   `json:"valid"`
+	ShopID     int64  `json:"shopId,omitempty"`
+	TableID    int64  `json:"tableId,omitempty"`
+	TableToken string `json:"tableToken,omitempty"`
 }
 
 func ValidateTableHandler(w http.ResponseWriter, r *http.Request) {
@@ -31,8 +32,9 @@ func ValidateTableHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	writeJSON(w, http.StatusOK, ValidateTableResponse{
-		Valid:   true,
-		ShopID:  table.BusinessID,
-		TableID: table.ID,
+		Valid:      true,
+		ShopID:     table.BusinessID,
+		TableID:    table.ID,
+		TableToken: table.Token,
 	})
 }

@@ -51,7 +51,8 @@ func (db *DB) GetTableByToken(ctx context.Context, token string) (*types.Table, 
 	status,
 	qr_code_url,
 	COALESCE(table_no, 0) AS table_no,
-	description
+	description,
+	token
 	FROM tables
 	WHERE token = $1
 	`
